@@ -5,11 +5,30 @@ namespace App\Http\Controllers;
 use App\Models\Feedback;
 use Illuminate\Http\Request;
 
+
 class FeedbackController extends Controller
 {
-    // Public: Create Feedback
+    /**
+     * @OA\Post(
+     *     path="/api/feedback",
+     *     summary="Create customer feedback",
+     *     tags={"Feedback"},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(ref="#/components/schemas/Feedback")
+     *     ),
+     *     @OA\Response(response=201, description="Feedback created successfully"),
+     *     @OA\Response(response=422, description="Validation error"),
+     *     @OA\Header(
+     *         header="Accept",
+     *         description="application/json only",
+     *         @OA\Schema(type="string", example="application/json")
+     *     )
+     * )
+     */
     public function store(Request $request)
     {
+        try {
         $request->validate([
             'customer_name' => 'required|string',
             'rating' => 'nullable|integer|between:1,5',
@@ -26,37 +45,125 @@ class FeedbackController extends Controller
         ]);
 
         return response()->json($feedback, 201);
+        } catch (\Exception $exception) {
+            return response()->json([
+                'msg' => $exception->getMessage(),
+            ]);
+        }
     }
 
-    // Public: Read Published Feedback
+    /**
+     * @OA\Get(
+     *     path="/api/feedback",
+     *     summary="Get published feedback",
+     *     tags={"Feedback"},
+     *     @OA\Parameter(
+     *         name="location_id",
+     *         in="query",
+     *         description="Filter feedback by location ID",
+     *         required=false,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="List of published feedback",
+     *         @OA\JsonContent(type="array", @OA\Items(ref="#/components/schemas/Feedback"))
+     *     ),
+     *     @OA\Header(
+     *         header="Accept",
+     *         description="application/json only",
+     *         @OA\Schema(type="string", example="application/json")
+     *     )
+     * )
+     */
     public function index(Request $request)
     {
+        try {
         $query = Feedback::where('status', 'Published');
 
         if ($request->has('location_id')) {
             $query->where('location_id', $request->location_id);
         }
 
-        $feedback = $query->get();
-        return response()->json($feedback);
+        return response()->json($query->get());
+
+        } catch (\Exception $exception) {
+            return response()->json([
+                'msg' => $exception->getMessage(),
+            ]);
+        }
     }
 
-    // Admin: Read All Feedback (with filters)
+    /**
+     * @OA\Get(
+     *     path="/api/feedback/admin",
+     *     summary="Get all feedback (Admin only)",
+     *     tags={"Feedback"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Parameter(
+     *         name="status",
+     *         in="query",
+     *         description="Filter feedback by status (Pending, Published, Archived)",
+     *         required=false,
+     *         @OA\Schema(type="string")
+     *     ),
+     *     @OA\Response(response=200, description="List of feedback"),
+     *     @OA\Header(
+     *         header="Accept",
+     *         description="application/json only",
+     *         @OA\Schema(type="string", example="application/json")
+     *     )
+     * )
+     */
     public function adminIndex(Request $request)
     {
+        try {
+
         $query = Feedback::query();
 
         if ($request->has('status')) {
             $query->where('status', $request->status);
         }
 
-        $feedback = $query->get();
-        return response()->json($feedback);
+        return response()->json($query->get());
+
+        } catch (\Exception $exception) {
+            return response()->json([
+                'msg' => $exception->getMessage(),
+            ]);
+        }
     }
 
-    // Admin: Update Feedback Status/Comment
+    /**
+     * @OA\Put(
+     *     path="/api/feedback/{id}",
+     *     summary="Update feedback status or comment (Admin only)",
+     *     tags={"Feedback"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         description="Feedback ID",
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(ref="#/components/schemas/Feedback")
+     *     ),
+     *     @OA\Response(response=200, description="Feedback updated"),
+     *     @OA\Response(response=404, description="Feedback not found"),
+     *     @OA\Header(
+     *         header="Accept",
+     *         description="application/json only",
+     *         @OA\Schema(type="string", example="application/json")
+     *     )
+     * )
+     */
     public function update(Request $request, $id)
     {
+        try {
+
         $feedback = Feedback::findOrFail($id);
 
         $request->validate([
@@ -66,13 +173,47 @@ class FeedbackController extends Controller
 
         $feedback->update($request->only(['status', 'comment']));
         return response()->json($feedback);
+
+        } catch (\Exception $exception) {
+            return response()->json([
+                'msg' => $exception->getMessage(),
+            ]);
+        }
     }
 
-    // Admin: Delete Feedback
+    /**
+     * @OA\Delete(
+     *     path="/api/feedback/{id}",
+     *     summary="Delete feedback (Admin only)",
+     *     tags={"Feedback"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         description="Feedback ID",
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(response=204, description="Feedback deleted"),
+     *     @OA\Response(response=404, description="Feedback not found"),
+     *     @OA\Header(
+     *         header="Accept",
+     *         description="application/json only",
+     *         @OA\Schema(type="string", example="application/json")
+     *     )
+     * )
+     */
     public function destroy($id)
     {
-        $feedback = Feedback::findOrFail($id);
-        $feedback->delete();
+        try {
+
+        Feedback::findOrFail($id)->delete();
         return response()->json(null, 204);
+
+        } catch (\Exception $exception) {
+            return response()->json([
+                'msg' => $exception->getMessage(),
+            ]);
+        }
     }
 }

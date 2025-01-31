@@ -2,28 +2,65 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\ContactCreated;
 use App\Http\Controllers\Controller;
 use App\Models\Contact;
 use Illuminate\Http\Request;
 
+
 class ContactController extends Controller
 {
-    // GET /api/contacts (Read all contacts)
+    /**
+     * @OA\Get(
+     *     path="/api/contacts",
+     *     summary="Get all contacts",
+     *     tags={"Contacts"},
+     *     @OA\Parameter(
+     *         name="status",
+     *         in="query",
+     *         description="Filter by status (pending, completed)",
+     *         required=false,
+     *         @OA\Schema(type="string")
+     *     ),
+     *     @OA\Parameter(
+     *         name="priority",
+     *         in="query",
+     *         description="Filter by priority (low, medium, high)",
+     *         required=false,
+     *         @OA\Schema(type="string")
+     *     ),
+     *     @OA\Parameter(
+     *         name="search",
+     *         in="query",
+     *         description="Search by name, email, or message",
+     *         required=false,
+     *         @OA\Schema(type="string")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="List of contacts",
+     *         @OA\JsonContent(
+     *             type="array",
+     *             @OA\Items(ref="#/components/schemas/Contact")
+     *         )
+     *     )
+     * )
+     */
     public function index(Request $request)
     {
+        try {
+
+
         $query = Contact::query();
 
-        // Filter by status
         if ($request->has('status')) {
             $query->where('status', $request->input('status'));
         }
 
-        // Filter by priority
         if ($request->has('priority')) {
             $query->where('priority', $request->input('priority'));
         }
 
-        // Full-text search on name, email, or message
         if ($request->has('search')) {
             $search = $request->input('search');
             $query->where(function ($q) use ($search) {
@@ -33,13 +70,33 @@ class ContactController extends Controller
             });
         }
 
-        $contacts = $query->get();
-        return response()->json($contacts);
+        return response()->json($query->get());
+
+        } catch (\Exception $exception) {
+            return response()->json([
+                'msg' => $exception->getMessage(),
+            ]);
+        }
     }
 
-    // POST /api/contacts (Create a new contact)
+    /**
+     * @OA\Post(
+     *     path="/api/contacts",
+     *     summary="Create a new contact",
+     *     tags={"Contacts"},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(ref="#/components/schemas/Contact")
+     *     ),
+     *     @OA\Response(response=201, description="Contact created successfully"),
+     *     @OA\Response(response=422, description="Validation error")
+     * )
+     */
     public function store(Request $request)
     {
+        try {
+
+
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:contacts,email',
@@ -51,52 +108,111 @@ class ContactController extends Controller
             'priority' => 'nullable|string|in:low,medium,high',
         ]);
 
-        $contact = Contact::create([
-            'name' => $request->input('name'),
-            'email' => $request->input('email'),
-            'phone' => $request->input('phone'),
-            'message' => $request->input('message'),
-            'contact_via_email' => $request->input('contact_via_email', false), // Default to false
-            'contact_via_phone' => $request->input('contact_via_phone', false), // Default to false
-            'status' => $request->input('status', 'pending'), // Default to 'pending'
-            'priority' => $request->input('priority', 'medium'), // Default to 'medium'
-        ]);
+        $contact = Contact::create($request->all());
+        event(new ContactCreated($contact));
 
         return response()->json($contact, 201);
+
+        } catch (\Exception $exception) {
+            return response()->json([
+                'msg' => $exception->getMessage(),
+            ]);
+        }
     }
 
-    // GET /api/contacts/{id} (Read a single contact)
+    /**
+     * @OA\Get(
+     *     path="/api/contacts/{id}",
+     *     summary="Get a single contact",
+     *     tags={"Contacts"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         description="Contact ID",
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(response=200, description="Contact details"),
+     *     @OA\Response(response=404, description="Contact not found")
+     * )
+     */
     public function show($id)
     {
-        $contact = Contact::findOrFail($id);
-        return response()->json($contact);
+        try {
+        return response()->json(Contact::findOrFail($id));
+
+        } catch (\Exception $exception) {
+            return response()->json([
+                'msg' => $exception->getMessage(),
+            ]);
+        }
     }
 
-    // PUT /api/contacts/{id} (Update a contact)
+    /**
+     * @OA\Put(
+     *     path="/api/contacts/{id}",
+     *     summary="Update a contact",
+     *     tags={"Contacts"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         description="Contact ID",
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(ref="#/components/schemas/Contact")
+     *     ),
+     *     @OA\Response(response=200, description="Contact updated"),
+     *     @OA\Response(response=404, description="Contact not found")
+     * )
+     */
     public function update(Request $request, $id)
     {
+        try {
+
         $contact = Contact::findOrFail($id);
-
-        $request->validate([
-            'name' => 'sometimes|string|max:255',
-            'email' => 'sometimes|email|unique:contacts,email,' . $contact->id,
-            'phone' => 'nullable|string|max:20',
-            'message' => 'sometimes|string',
-            'contact_via_email' => 'nullable|boolean',
-            'contact_via_phone' => 'nullable|boolean',
-            'status' => 'nullable|string|in:pending,completed',
-            'priority' => 'nullable|string|in:low,medium,high',
-        ]);
-
         $contact->update($request->all());
         return response()->json($contact);
+
+        } catch (\Exception $exception) {
+            return response()->json([
+                'msg' => $exception->getMessage(),
+            ]);
+        }
     }
 
-    // DELETE /api/contacts/{id} (Delete a contact)
+    /**
+     * @OA\Delete(
+     *     path="/api/contacts/{id}",
+     *     summary="Delete a contact",
+     *     tags={"Contacts"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         description="Contact ID",
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(response=204, description="Contact deleted"),
+     *     @OA\Response(response=404, description="Contact not found")
+     * )
+     */
     public function destroy($id)
     {
-        $contact = Contact::findOrFail($id);
-        $contact->delete();
+        try {
+
+        Contact::findOrFail($id)->delete();
         return response()->json(null, 204);
+
+        } catch (\Exception $exception) {
+            return response()->json([
+                'msg' => $exception->getMessage(),
+            ]);
+        }
     }
 }

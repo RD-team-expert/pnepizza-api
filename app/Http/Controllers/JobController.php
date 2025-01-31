@@ -6,29 +6,73 @@ use App\Http\Controllers\Controller;
 use App\Models\Job;
 use Illuminate\Http\Request;
 
+
 class JobController extends Controller
 {
-    // GET /api/jobs (Read all jobs)
+    /**
+     * @OA\Get(
+     *     path="/api/jobs",
+     *     summary="Get all jobs",
+     *     tags={"Jobs"},
+     *
+     *     @OA\Parameter(
+     *         name="status",
+     *         in="query",
+     *         description="Filter jobs by status (active, inactive)",
+     *         required=false,
+     *         @OA\Schema(type="string")
+     *     ),
+     *     @OA\Parameter(
+     *         name="job_type",
+     *         in="query",
+     *         description="Filter jobs by job type",
+     *         required=false,
+     *         @OA\Schema(type="string")
+     *     ),
+     *     @OA\Parameter(
+     *         name="city",
+     *         in="query",
+     *         description="Filter jobs by city",
+     *         required=false,
+     *         @OA\Schema(type="string")
+     *     ),
+     *     @OA\Parameter(
+     *         name="search",
+     *         in="query",
+     *         description="Search by job title or job description",
+     *         required=false,
+     *         @OA\Schema(type="string")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="List of jobs",
+     *         @OA\JsonContent(type="array", @OA\Items(ref="#/components/schemas/Job"))
+     *     ),
+     *     @OA\Header(
+     *         header="Accept",
+     *         description="application/json only",
+     *         @OA\Schema(type="string", example="application/json")
+     *     )
+     * )
+     */
     public function index(Request $request)
     {
+        try {
+
         $query = Job::query();
 
-        // Filter by status
         if ($request->has('status')) {
             $query->where('status', $request->input('status'));
         }
 
-        // Filter by job type
         if ($request->has('job_type')) {
             $query->where('job_type', $request->input('job_type'));
         }
 
-        // Filter by city
         if ($request->has('city')) {
             $query->where('city', $request->input('city'));
         }
 
-        // Full-text search on job_title or job_description
         if ($request->has('search')) {
             $search = $request->input('search');
             $query->where(function ($q) use ($search) {
@@ -37,13 +81,39 @@ class JobController extends Controller
             });
         }
 
-        $jobs = $query->get();
-        return response()->json($jobs);
+        return response()->json($query->get());
+
+        } catch (\Exception $exception) {
+            return response()->json([
+                'msg' => $exception->getMessage(),
+            ]);
+        }
     }
 
-    // POST /api/jobs (Create a new job)
+    /**
+     * @OA\Post(
+     *     path="/api/jobs",
+     *     summary="Create a new job posting",
+     *     tags={"Jobs"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(ref="#/components/schemas/Job")
+     *     ),
+     *     @OA\Response(response=201, description="Job created successfully"),
+     *     @OA\Response(response=422, description="Validation error"),
+     *     @OA\Header(
+     *         header="Accept",
+     *         description="application/json only",
+     *         @OA\Schema(type="string", example="application/json")
+     *     )
+     * )
+     */
     public function store(Request $request)
     {
+        try {
+
+
         $request->validate([
             'job_title' => 'required|string|max:255',
             'min_salary' => 'required|numeric',
@@ -57,56 +127,124 @@ class JobController extends Controller
             'status' => 'nullable|string|in:active,inactive',
         ]);
 
-        $job = Job::create([
-            'job_title' => $request->input('job_title'),
-            'min_salary' => $request->input('min_salary'),
-            'max_salary' => $request->input('max_salary'),
-            'city' => $request->input('city'),
-            'state' => $request->input('state'),
-            'job_type' => $request->input('job_type'),
-            'job_description' => $request->input('job_description'),
-            'indeed_link' => $request->input('indeed_link'),
-            'workstream_link' => $request->input('workstream_link'),
-            'status' => $request->input('status', 'active'), // Default to 'active'
-        ]);
-
+        $job = Job::create($request->all());
         return response()->json($job, 201);
+
+        } catch (\Exception $exception) {
+            return response()->json([
+                'msg' => $exception->getMessage(),
+            ]);
+        }
     }
 
-    // GET /api/jobs/{id} (Read a single job)
+    /**
+     * @OA\Get(
+     *     path="/api/jobs/{id}",
+     *     summary="Get a single job posting",
+     *     tags={"Jobs"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         description="Job ID",
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(response=200, description="Job details"),
+     *     @OA\Response(response=404, description="Job not found"),
+     *     @OA\Header(
+     *         header="Accept",
+     *         description="application/json only",
+     *         @OA\Schema(type="string", example="application/json")
+     *     )
+     * )
+     */
     public function show($id)
     {
-        $job = Job::findOrFail($id);
-        return response()->json($job);
+        try {
+
+        return response()->json(Job::findOrFail($id));
+
+        } catch (\Exception $exception) {
+            return response()->json([
+                'msg' => $exception->getMessage(),
+            ]);
+        }
     }
 
-    // PUT /api/jobs/{id} (Update a job)
+    /**
+     * @OA\Put(
+     *     path="/api/jobs/{id}",
+     *     summary="Update a job posting",
+     *     tags={"Jobs"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         description="Job ID",
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(ref="#/components/schemas/Job")
+     *     ),
+     *     @OA\Response(response=200, description="Job updated"),
+     *     @OA\Response(response=404, description="Job not found"),
+     *     @OA\Header(
+     *         header="Accept",
+     *         description="application/json only",
+     *         @OA\Schema(type="string", example="application/json")
+     *     )
+     * )
+     */
     public function update(Request $request, $id)
     {
+        try {
         $job = Job::findOrFail($id);
-
-        $request->validate([
-            'job_title' => 'sometimes|string|max:255',
-            'min_salary' => 'sometimes|numeric',
-            'max_salary' => 'sometimes|numeric',
-            'city' => 'sometimes|string|max:255',
-            'state' => 'sometimes|string|max:255',
-            'job_type' => 'sometimes|string|max:255',
-            'job_description' => 'sometimes|string',
-            'indeed_link' => 'nullable|url',
-            'workstream_link' => 'nullable|url',
-            'status' => 'nullable|string|in:active,inactive',
-        ]);
-
         $job->update($request->all());
         return response()->json($job);
+
+        } catch (\Exception $exception) {
+            return response()->json([
+                'msg' => $exception->getMessage(),
+            ]);
+        }
     }
 
-    // DELETE /api/jobs/{id} (Delete a job)
+    /**
+     * @OA\Delete(
+     *     path="/api/jobs/{id}",
+     *     summary="Delete a job posting",
+     *     tags={"Jobs"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         description="Job ID",
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(response=204, description="Job deleted"),
+     *     @OA\Response(response=404, description="Job not found"),
+     *     @OA\Header(
+     *         header="Accept",
+     *         description="application/json only",
+     *         @OA\Schema(type="string", example="application/json")
+     *     )
+     * )
+     */
     public function destroy($id)
     {
-        $job = Job::findOrFail($id);
-        $job->delete();
+        try {
+
+        Job::findOrFail($id)->delete();
         return response()->json(null, 204);
+
+        } catch (\Exception $exception) {
+            return response()->json([
+                'msg' => $exception->getMessage(),
+            ]);
+        }
     }
 }

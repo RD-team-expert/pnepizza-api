@@ -5,12 +5,33 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\Location;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
+
 
 class LocationController extends Controller
 {
+    /**
+     * @OA\Post(
+     *     path="/api/locations",
+     *     summary="Create a new location",
+     *     tags={"Locations"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(ref="#/components/schemas/Location")
+     *     ),
+     *     @OA\Response(response=201, description="Location created successfully"),
+     *     @OA\Response(response=422, description="Validation error"),
+     *     @OA\Header(
+     *         header="Accept",
+     *         description="application/json only",
+     *         @OA\Schema(type="string", example="application/json")
+     *     )
+     * )
+     */
     public function store(Request $request)
     {
+        try {
+
         $request->validate([
             'name' => 'required|string',
             'image_url' => 'nullable|url',
@@ -25,14 +46,51 @@ class LocationController extends Controller
 
         $location = Location::create($request->all());
         return response()->json($location, 201);
+
+        } catch (\Exception $exception) {
+            return response()->json([
+                'msg' => $exception->getMessage(),
+            ]);
+        }
     }
 
-    // Read All Locations
+    /**
+     * @OA\Get(
+     *     path="/api/locations",
+     *     summary="Get all locations",
+     *     tags={"Locations"},
+     *     @OA\Parameter(
+     *         name="search",
+     *         in="query",
+     *         description="Search by name or street",
+     *         required=false,
+     *         @OA\Schema(type="string")
+     *     ),
+     *     @OA\Parameter(
+     *         name="status",
+     *         in="query",
+     *         description="Filter by status (true or false)",
+     *         required=false,
+     *         @OA\Schema(type="boolean")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="List of locations",
+     *         @OA\JsonContent(type="array", @OA\Items(ref="#/components/schemas/Location"))
+     *     ),
+     *     @OA\Header(
+     *         header="Accept",
+     *         description="application/json only",
+     *         @OA\Schema(type="string", example="application/json")
+     *     )
+     * )
+     */
     public function index(Request $request)
     {
+        try {
+
         $query = Location::query();
 
-        // Optional filters
         if ($request->has('search')) {
             $query->where('name', 'like', '%' . $request->search . '%')
                 ->orWhere('street', 'like', '%' . $request->search . '%');
@@ -42,45 +100,123 @@ class LocationController extends Controller
             $query->where('status', $request->status);
         }
 
-        $locations = $query->get();
-        return response()->json($locations);
+        return response()->json($query->get());
+
+        } catch (\Exception $exception) {
+            return response()->json([
+                'msg' => $exception->getMessage(),
+            ]);
+        }
     }
 
-    // Read Single Location
+    /**
+     * @OA\Get(
+     *     path="/api/locations/{id}",
+     *     summary="Get a single location",
+     *     tags={"Locations"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         description="Location ID",
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(response=200, description="Location details"),
+     *     @OA\Response(response=404, description="Location not found"),
+     *     @OA\Header(
+     *         header="Accept",
+     *         description="application/json only",
+     *         @OA\Schema(type="string", example="application/json")
+     *     )
+     * )
+     */
     public function show($id)
     {
-        $location = Location::findOrFail($id);
-        return response()->json($location);
+        try {
+        return response()->json(Location::findOrFail($id));
+
+        } catch (\Exception $exception) {
+            return response()->json([
+                'msg' => $exception->getMessage(),
+            ]);
+        }
     }
 
-    // Update Location
+    /**
+     * @OA\Put(
+     *     path="/api/locations/{id}",
+     *     summary="Update a location",
+     *     tags={"Locations"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         description="Location ID",
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(ref="#/components/schemas/Location")
+     *     ),
+     *     @OA\Response(response=200, description="Location updated"),
+     *     @OA\Response(response=404, description="Location not found"),
+     *     @OA\Header(
+     *         header="Accept",
+     *         description="application/json only",
+     *         @OA\Schema(type="string", example="application/json")
+     *     )
+     * )
+     */
     public function update(Request $request, $id)
     {
+        try {
+
         $location = Location::findOrFail($id);
-
-        $request->validate([
-            'name' => 'sometimes|string',
-            'image_url' => 'nullable|url',
-            'street' => 'sometimes|string',
-            'city' => 'sometimes|string',
-            'state' => 'sometimes|string',
-            'zip' => 'sometimes|string',
-            'description' => 'nullable|string',
-            'status' => 'sometimes|boolean',
-        ]);
-
         $location->update($request->all());
         return response()->json($location);
+
+        } catch (\Exception $exception) {
+            return response()->json([
+                'msg' => $exception->getMessage(),
+            ]);
+        }
     }
 
-    // Delete Location
+    /**
+     * @OA\Delete(
+     *     path="/api/locations/{id}",
+     *     summary="Delete a location",
+     *     tags={"Locations"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         description="Location ID",
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(response=204, description="Location deleted"),
+     *     @OA\Response(response=404, description="Location not found"),
+     *     @OA\Header(
+     *         header="Accept",
+     *         description="application/json only",
+     *         @OA\Schema(type="string", example="application/json")
+     *     )
+     * )
+     */
     public function destroy($id)
     {
-        $location = Location::findOrFail($id);
-        $location->delete();
+        try {
+
+        Location::findOrFail($id)->delete();
         return response()->json(null, 204);
+
+        } catch (\Exception $exception) {
+            return response()->json([
+                'msg' => $exception->getMessage(),
+            ]);
+        }
     }
 }
-
-
-

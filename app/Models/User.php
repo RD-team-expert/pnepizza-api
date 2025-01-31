@@ -12,9 +12,23 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 
+/**
+ * @OA\Schema(
+ *     schema="User",
+ *     required={"name", "email", "password", "role"},
+ *     @OA\Property(property="id", type="integer", example=1),
+ *     @OA\Property(property="name", type="string", example="user"),
+ *     @OA\Property(property="email", type="string", example="user@gmail.com"),
+ *     @OA\Property(property="image", type="string", example="storage/user/avatar.jpg"),
+ *     @OA\Property(property="role", type="string", example="Admin"),
+ *     @OA\Property(property="created_at", type="string", format="date-time"),
+ *     @OA\Property(property="updated_at", type="string", format="date-time")
+ * )
+ */
+
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable, HasRoles, HasUuids;
+    use HasApiTokens, HasFactory, Notifiable, HasRoles;
 
     /**
      * The attributes that are mass assignable.

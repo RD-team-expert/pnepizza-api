@@ -2,78 +2,184 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\AcquisitionCreated;
 use App\Http\Controllers\Controller;
 use App\Models\Acquisition;
 use Illuminate\Http\Request;
+use Exception;
+
+
 
 class AcquisitionController extends Controller
 {
-    // GET /api/acquisitions (Read all acquisitions)
+
+
+
+
+    /**
+     * @OA\Get(
+     *     path="/api/acquisitions",
+     *     summary="Get all acquisitions",
+     *     tags={"Acquisitions"},
+     *     @OA\Parameter(
+     *         name="status",
+     *         in="query",
+     *         description="Filter by status",
+     *         required=false,
+     *         @OA\Schema(type="string")
+     *     ),
+     *     @OA\Parameter(
+     *         name="priority",
+     *         in="query",
+     *         description="Filter by priority",
+     *         required=false,
+     *         @OA\Schema(type="string")
+     *     ),
+     *     @OA\Parameter(
+     *         name="search",
+     *         in="query",
+     *         description="Search by name, email, city, or state",
+     *         required=false,
+     *         @OA\Schema(type="string")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="List of acquisitions",
+     *         @OA\JsonContent(type="array", @OA\Items(ref="#/components/schemas/Acquisition"))
+     *     )
+     * )
+     */
     public function index(Request $request)
     {
-        $query = Acquisition::query();
+        try {
+            $query = Acquisition::query();
 
-        // Filter by status
-        if ($request->has('status')) {
-            $query->where('status', $request->input('status'));
+            if ($request->has('status')) {
+                $query->where('status', $request->input('status'));
+            }
+
+            if ($request->has('priority')) {
+                $query->where('priority', $request->input('priority'));
+            }
+
+            if ($request->has('search')) {
+                $search = $request->input('search');
+                $query->where(function ($q) use ($search) {
+                    $q->where('name', 'like', "%$search%")
+                        ->orWhere('email', 'like', "%$search%")
+                        ->orWhere('city', 'like', "%$search%")
+                        ->orWhere('state', 'like', "%$search%");
+                });
+            }
+
+            $acquisitions = $query->get();
+            return response()->json($acquisitions);
+        } catch (\Exception $exception) {
+            return response()->json([
+                'msg' => $exception->getMessage(),
+            ]);
         }
-
-        // Filter by priority
-        if ($request->has('priority')) {
-            $query->where('priority', $request->input('priority'));
-        }
-
-        // Full-text search on name, email, city, or state
-        if ($request->has('search')) {
-            $search = $request->input('search');
-            $query->where(function ($q) use ($search) {
-                $q->where('name', 'like', "%$search%")
-                    ->orWhere('email', 'like', "%$search%")
-                    ->orWhere('city', 'like', "%$search%")
-                    ->orWhere('state', 'like', "%$search%");
-            });
-        }
-
-        $acquisitions = $query->get();
-        return response()->json($acquisitions);
     }
 
-    // POST /api/acquisitions (Create a new acquisition)
+    /**
+     * @OA\Post(
+     *     path="/api/acquisitions",
+     *     summary="Create a new acquisition",
+     *     tags={"Acquisitions"},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(ref="#/components/schemas/Acquisition")
+     *     ),
+     *     @OA\Response(response=201, description="Acquisition created"),
+     *     @OA\Response(response=422, description="Validation error")
+     * )
+     */
     public function store(Request $request)
     {
-        $request->validate([
+        $validatedData = $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:acquisitions,email',
+            'email' => 'required|email',
             'phone' => 'nullable|string|max:20',
             'city' => 'required|string|max:100',
             'state' => 'required|string|size:2',
             'status' => 'nullable|string|in:New,In Review,Contacted,Closed',
             'priority' => 'nullable|string|in:High,Medium,Low',
         ]);
+        try {
+            if (Acquisition::where('email', $validatedData['email'])->exists()) {
+                throw new Exception('A user with this email already exists.');
+            }
+            $acquisition = Acquisition::create($validatedData);
 
-        $acquisition = Acquisition::create([
-            'name' => $request->input('name'),
-            'email' => $request->input('email'),
-            'phone' => $request->input('phone'),
-            'city' => $request->input('city'),
-            'state' => $request->input('state'),
-            'status' => $request->input('status', 'New'), // Default to 'New'
-            'priority' => $request->input('priority', 'Medium'), // Default to 'Medium'
-        ]);
+            // Dispatch the event
+            event(new AcquisitionCreated($acquisition));
 
-        return response()->json($acquisition, 201);
+            return response()->json(
+                $acquisition
+           );
+        } catch (\Exception $e) {
+            return response()->json([
+                'msg' => $e->getMessage()
+            ], 500);
+        }
     }
 
-    // GET /api/acquisitions/{id} (Read a single acquisition)
+    /**
+     * @OA\Get(
+     *     path="/api/acquisitions/{id}",
+     *     summary="Get a single acquisition",
+     *     tags={"Acquisitions"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         description="Acquisition ID",
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(response=200, description="Acquisition details"),
+     *     @OA\Response(response=404, description="Acquisition not found")
+     * )
+     */
     public function show($id)
     {
+        try {
         $acquisition = Acquisition::findOrFail($id);
         return response()->json($acquisition);
+
+        } catch (\Exception $exception) {
+            return response()->json([
+                'msg' => $exception->getMessage(),
+            ]);
+        }
     }
 
-    // PUT /api/acquisitions/{id} (Update an acquisition)
+    /**
+     * @OA\Put(
+     *     path="/api/acquisitions/{id}",
+     *     summary="Update an acquisition",
+     *     tags={"Acquisitions"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         description="Acquisition ID",
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(ref="#/components/schemas/Acquisition")
+     *     ),
+     *     @OA\Response(response=200, description="Acquisition updated"),
+     *     @OA\Response(response=404, description="Acquisition not found")
+     * )
+     */
     public function update(Request $request, $id)
     {
+        try {
+
+
         $acquisition = Acquisition::findOrFail($id);
 
         $request->validate([
@@ -88,13 +194,43 @@ class AcquisitionController extends Controller
 
         $acquisition->update($request->all());
         return response()->json($acquisition);
+        } catch (\Exception $exception) {
+            return response()->json([
+                'msg' => $exception->getMessage(),
+            ]);
+        }
     }
 
-    // DELETE /api/acquisitions/{id} (Delete an acquisition)
+    /**
+     * @OA\Delete(
+     *     path="/api/acquisitions/{id}",
+     *     summary="Delete an acquisition",
+     *     tags={"Acquisitions"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         description="Acquisition ID",
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(response=204, description="Acquisition deleted"),
+     *     @OA\Response(response=404, description="Acquisition not found")
+     * )
+     */
     public function destroy($id)
     {
+        try {
+
+
         $acquisition = Acquisition::findOrFail($id);
         $acquisition->delete();
-        return response()->json(null, 204);
+        return response()->json([1], 204);
+
+        } catch (\Exception $exception) {
+            return response()->json([
+                'msg' => $exception->getMessage(),
+            ]);
+        }
     }
 }
