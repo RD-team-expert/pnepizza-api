@@ -12,8 +12,47 @@ use Illuminate\Support\Facades\Storage;
 class MediaController extends Controller
 {
     /**
+     * @OA\Get(
+     *     path="/api/v1/media",
+     *     summary="Get paginated list of media files",
+     *     tags={"Media"},
+     *     @OA\Parameter(
+     *         name="page",
+     *         in="query",
+     *         required=false,
+     *         description="Page number",
+     *         @OA\Schema(type="integer", example=1)
+     *     ),
+     *     @OA\Parameter(
+     *         name="per_page",
+     *         in="query",
+     *         required=false,
+     *         description="Number of items per page",
+     *         @OA\Schema(type="integer", example=10)
+     *     ),
+     *     @OA\Response(response=200, description="Paginated list of media files"),
+     *     @OA\Header(
+     *         header="Accept",
+     *         description="application/json only",
+     *         @OA\Schema(type="string", example="application/json")
+     *     )
+     * )
+     */
+    public function index(Request $request)
+    {
+        try {
+            $perPage = $request->query('per_page', 10);
+            $media = Media::paginate($perPage);
+            return response()->json($media);
+        } catch (\Exception $exception) {
+            return response()->json([
+                'msg' => $exception->getMessage(),
+            ], 500);
+        }
+    }
+    /**
      * @OA\Post(
-     *     path="/api/media",
+     *     path="/api/v1/media",
      *     summary="Upload a media file",
      *     tags={"Media"},
      *     security={{"bearerAuth":{}}},
@@ -77,7 +116,7 @@ class MediaController extends Controller
 
     /**
      * @OA\Get(
-     *     path="/api/media/{id}",
+     *     path="/api/v1/media/{id}",
      *     summary="Get media details",
      *     tags={"Media"},
      *     security={{"bearerAuth":{}}},
@@ -111,7 +150,7 @@ class MediaController extends Controller
 
     /**
      * @OA\Post(
-     *     path="/api/media/{id}",
+     *     path="/api/v1/media/{id}",
      *     summary="Update a media file",
      *     tags={"Media"},
      *     security={{"bearerAuth":{}}},
@@ -191,7 +230,7 @@ class MediaController extends Controller
 
     /**
      * @OA\Delete(
-     *     path="/api/media/{id}",
+     *     path="/api/v1/media/{id}",
      *     summary="Delete a media file",
      *     tags={"Media"},
      *     security={{"bearerAuth":{}}},

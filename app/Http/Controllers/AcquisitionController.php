@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Events\AcquisitionCreated;
 use App\Http\Controllers\Controller;
 use App\Models\Acquisition;
+use App\Services\NotificationService;
 use Illuminate\Http\Request;
 use Exception;
 
@@ -18,7 +19,7 @@ class AcquisitionController extends Controller
 
     /**
      * @OA\Get(
-     *     path="/api/acquisitions",
+     *     path="/api/v1/acquisitions",
      *     summary="Get all acquisitions",
      *     tags={"Acquisitions"},
      *     @OA\Parameter(
@@ -83,7 +84,7 @@ class AcquisitionController extends Controller
 
     /**
      * @OA\Post(
-     *     path="/api/acquisitions",
+     *     path="/api/v1/acquisitions",
      *     summary="Create a new acquisition",
      *     tags={"Acquisitions"},
      *     @OA\RequestBody(
@@ -94,7 +95,7 @@ class AcquisitionController extends Controller
      *     @OA\Response(response=422, description="Validation error")
      * )
      */
-    public function store(Request $request)
+    public function store(Request $request, NotificationService $notificationService)
     {
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
@@ -105,18 +106,21 @@ class AcquisitionController extends Controller
             'status' => 'nullable|string|in:New,In Review,Contacted,Closed',
             'priority' => 'nullable|string|in:High,Medium,Low',
         ]);
+
         try {
             if (Acquisition::where('email', $validatedData['email'])->exists()) {
                 throw new Exception('A user with this email already exists.');
             }
+
             $acquisition = Acquisition::create($validatedData);
 
-            // Dispatch the event
+            // Notify the admin
+            $notificationService->notifyAdmin('A new acquisition has been created: ' . $acquisition->name);
+
+            // Dispatch the event (if needed)
             event(new AcquisitionCreated($acquisition));
 
-            return response()->json(
-                $acquisition
-           );
+            return response()->json($acquisition, 201);
         } catch (\Exception $e) {
             return response()->json([
                 'msg' => $e->getMessage()
@@ -126,7 +130,7 @@ class AcquisitionController extends Controller
 
     /**
      * @OA\Get(
-     *     path="/api/acquisitions/{id}",
+     *     path="/api/v1/acquisitions/{id}",
      *     summary="Get a single acquisition",
      *     tags={"Acquisitions"},
      *     security={{"bearerAuth":{}}},
@@ -156,7 +160,7 @@ class AcquisitionController extends Controller
 
     /**
      * @OA\Put(
-     *     path="/api/acquisitions/{id}",
+     *     path="/api/v1/acquisitions/{id}",
      *     summary="Update an acquisition",
      *     tags={"Acquisitions"},
      *     security={{"bearerAuth":{}}},
@@ -203,7 +207,7 @@ class AcquisitionController extends Controller
 
     /**
      * @OA\Delete(
-     *     path="/api/acquisitions/{id}",
+     *     path="/api/v1/acquisitions/{id}",
      *     summary="Delete an acquisition",
      *     tags={"Acquisitions"},
      *     security={{"bearerAuth":{}}},

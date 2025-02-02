@@ -10,12 +10,14 @@ use App\Http\Controllers\LocationController;
 use App\Http\Controllers\ManageUserController;
 use App\Http\Controllers\MediaController;
 use App\Http\Controllers\MilestoneController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\TeamMemberController;
 use App\Http\Controllers\WorkstreamController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 
+Route::prefix('v1')->group(function () {
 
 Route::get('/positions', [WorkstreamController::class, 'getPositions']);
 
@@ -100,6 +102,11 @@ Route::prefix('users')->group(function () {
     Route::post('/{user}', [ManageUserController::class, 'update']); // Update user
     Route::delete('/{user}', [ManageUserController::class, 'destroy']); // Delete user
 });
+    Route::get('/notifications', [NotificationController::class, 'index']);
+    Route::post('/notifications/{id}/mark-as-read', [NotificationController::class, 'markAsRead']);
 
 });
+
+});
+
 

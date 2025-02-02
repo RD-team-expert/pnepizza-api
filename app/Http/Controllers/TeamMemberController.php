@@ -11,7 +11,7 @@ class TeamMemberController extends Controller
 {
     /**
      * @OA\Get(
-     *     path="/api/team-members",
+     *     path="/api/v1/team-members",
      *     summary="Get all team members",
      *     tags={"Team Members"},
      *     security={{"bearerAuth":{}}},
@@ -81,7 +81,7 @@ class TeamMemberController extends Controller
 
     /**
      * @OA\Post(
-     *     path="/api/team-members",
+     *     path="/api/v1/team-members",
      *     summary="Create a new team member",
      *     tags={"Team Members"},
      *     security={{"bearerAuth":{}}},
@@ -121,7 +121,7 @@ class TeamMemberController extends Controller
 
     /**
      * @OA\Get(
-     *     path="/api/team-members/{id}",
+     *     path="/api/v1/team-members/{id}",
      *     summary="Get a single team member",
      *     tags={"Team Members"},
      *     security={{"bearerAuth":{}}},
@@ -154,7 +154,7 @@ class TeamMemberController extends Controller
 
     /**
      * @OA\Put(
-     *     path="/api/team-members/{id}",
+     *     path="/api/v1/team-members/{id}",
      *     summary="Update a team member",
      *     tags={"Team Members"},
      *     security={{"bearerAuth":{}}},
@@ -195,7 +195,7 @@ class TeamMemberController extends Controller
 
     /**
      * @OA\Delete(
-     *     path="/team-members/{id}",
+     *     path="api/v1/team-members/{id}",
      *     summary="Delete a team member",
      *     tags={"Team Members"},
      *     security={{"bearerAuth":{}}},

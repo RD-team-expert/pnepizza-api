@@ -11,7 +11,7 @@ class MilestoneController extends Controller
 {
     /**
      * @OA\Get(
-     *     path="/api/milestones",
+     *     path="/api/v1/milestones",
      *     summary="Get all milestones",
      *     tags={"Milestones"},
      *     @OA\Parameter(
@@ -91,7 +91,7 @@ class MilestoneController extends Controller
 
     /**
      * @OA\Post(
-     *     path="/api/milestones",
+     *     path="/api/v1/milestones",
      *     summary="Create a new milestone",
      *     tags={"Milestones"},
      *     security={{"bearerAuth":{}}},
@@ -130,7 +130,7 @@ class MilestoneController extends Controller
 
     /**
      * @OA\Get(
-     *     path="/api/milestones/{id}",
+     *     path="/api/v1/milestones/{id}",
      *     summary="Get a single milestone",
      *     tags={"Milestones"},
      *     security={{"bearerAuth":{}}},
@@ -164,7 +164,7 @@ class MilestoneController extends Controller
 
     /**
      * @OA\Put(
-     *     path="/api/milestones/{id}",
+     *     path="/api/v1/milestones/{id}",
      *     summary="Update a milestone",
      *     tags={"Milestones"},
      *     security={{"bearerAuth":{}}},
@@ -205,7 +205,7 @@ class MilestoneController extends Controller
 
     /**
      * @OA\Delete(
-     *     path="/api/milestones/{id}",
+     *     path="/api/v1/milestones/{id}",
      *     summary="Delete a milestone",
      *     tags={"Milestones"},
      *     security={{"bearerAuth":{}}},

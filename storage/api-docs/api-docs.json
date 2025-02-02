@@ -6,13 +6,13 @@
         "version": "1.0"
     },
     "paths": {
-        "/api/acquisitions": {
+        "/api/v1/acquisitions": {
             "get": {
                 "tags": [
                     "Acquisitions"
                 ],
                 "summary": "Get all acquisitions",
-                "operationId": "0ff44b8f44f4865443d39ae08f05170a",
+                "operationId": "7177cd654e5ec482e2e2cde9c4cc20ad",
                 "parameters": [
                     {
                         "name": "status",
@@ -63,7 +63,7 @@
                     "Acquisitions"
                 ],
                 "summary": "Create a new acquisition",
-                "operationId": "89db012f6d73f9f14d357666af9cd40b",
+                "operationId": "1c42bcca44d60b563826e01bef86f386",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -84,13 +84,13 @@
                 }
             }
         },
-        "/api/acquisitions/{id}": {
+        "/api/v1/acquisitions/{id}": {
             "get": {
                 "tags": [
                     "Acquisitions"
                 ],
                 "summary": "Get a single acquisition",
-                "operationId": "9073e6609f69c49a8f93387165cc559d",
+                "operationId": "9df3b73bea84b856c89d03357f91eee0",
                 "parameters": [
                     {
                         "name": "id",
@@ -121,7 +121,7 @@
                     "Acquisitions"
                 ],
                 "summary": "Update an acquisition",
-                "operationId": "7a72171a52019c3ea0a8c16cd84041f6",
+                "operationId": "4bd14deab04d2bb8da5a3b132cd4fdee",
                 "parameters": [
                     {
                         "name": "id",
@@ -162,7 +162,7 @@
                     "Acquisitions"
                 ],
                 "summary": "Delete an acquisition",
-                "operationId": "547b7705f06e6d23b2406abaf161a115",
+                "operationId": "5c54ebf6d18cdba28af58137cc1eeb53",
                 "parameters": [
                     {
                         "name": "id",
@@ -189,13 +189,13 @@
                 ]
             }
         },
-        "/api/login": {
+        "/api/v1/login": {
             "post": {
                 "tags": [
                     "Authentication"
                 ],
                 "summary": "User login",
-                "operationId": "a3b306d14572d1f4bd6c064b3233e7b8",
+                "operationId": "da2ca4d7a5cdec77b8b45a20373535cb",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -253,13 +253,13 @@
                 ]
             }
         },
-        "/logout": {
+        "/api/v1/logout": {
             "post": {
                 "tags": [
                     "Authentication"
                 ],
                 "summary": "User logout",
-                "operationId": "68a6108af04af5e3bc1ea68a6c6f1299",
+                "operationId": "c4eddaf1a2e990cc90e4326c0d731d41",
                 "responses": {
                     "200": {
                         "description": "Successfully logged out",
@@ -285,13 +285,13 @@
                 ]
             }
         },
-        "/api/contacts": {
+        "/api/v1/contacts": {
             "get": {
                 "tags": [
                     "Contacts"
                 ],
                 "summary": "Get all contacts",
-                "operationId": "0f9efb5609dbb039b35ecafb28e492a2",
+                "operationId": "852ed2762dbbe0a94ccfc4c97587621a",
                 "parameters": [
                     {
                         "name": "status",
@@ -342,7 +342,7 @@
                     "Contacts"
                 ],
                 "summary": "Create a new contact",
-                "operationId": "a3b0baf957a16c1ed505f2e8985c254c",
+                "operationId": "379869295076c3201047aea1a0ece726",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -363,13 +363,13 @@
                 }
             }
         },
-        "/api/contacts/{id}": {
+        "/api/v1/contacts/{id}": {
             "get": {
                 "tags": [
                     "Contacts"
                 ],
                 "summary": "Get a single contact",
-                "operationId": "4b37f4c90f5cd7974a09bd688ac4d3dd",
+                "operationId": "b50e403e9334c34bf4a1d319a863d3e7",
                 "parameters": [
                     {
                         "name": "id",
@@ -400,7 +400,7 @@
                     "Contacts"
                 ],
                 "summary": "Update a contact",
-                "operationId": "554514967b71c75698b6cef012de4420",
+                "operationId": "a6027289e451f3cd7ddfec1b24203aae",
                 "parameters": [
                     {
                         "name": "id",
@@ -441,7 +441,7 @@
                     "Contacts"
                 ],
                 "summary": "Delete a contact",
-                "operationId": "3a78f2af1871a21a2b5a492134d72017",
+                "operationId": "564a2f7f26488abf9de14d86fac81557",
                 "parameters": [
                     {
                         "name": "id",
@@ -468,13 +468,13 @@
                 ]
             }
         },
-        "/api/events": {
+        "/api/v1/events": {
             "get": {
                 "tags": [
                     "Events"
                 ],
                 "summary": "Get all events",
-                "operationId": "7058ab7c89d20c752b6afd6d808f6526",
+                "operationId": "b2e55feb6b984fe8bede8d15c4028b7d",
                 "parameters": [
                     {
                         "name": "search",
@@ -507,7 +507,7 @@
                     "Events"
                 ],
                 "summary": "Create a new event",
-                "operationId": "508895e03d7f10edac84357084c87b20",
+                "operationId": "dd683f690eaabf94d57d985cdf4f2120",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -533,13 +533,13 @@
                 ]
             }
         },
-        "/api/events/{id}": {
+        "/api/v1/events/{id}": {
             "get": {
                 "tags": [
                     "Events"
                 ],
                 "summary": "Get a single event",
-                "operationId": "6f743f71f7a88dbe57be1d9c9ebf47cb",
+                "operationId": "cab1311cf1b9c45ea4813e7b5d0fd908",
                 "parameters": [
                     {
                         "name": "id",
@@ -570,7 +570,7 @@
                     "Events"
                 ],
                 "summary": "Update an event",
-                "operationId": "fb130dcf1ab4d7abbd3a173741df1f8f",
+                "operationId": "f2f9aa7bdb3bb955ea94ff859a7227d8",
                 "parameters": [
                     {
                         "name": "id",
@@ -611,7 +611,7 @@
                     "Events"
                 ],
                 "summary": "Delete an event",
-                "operationId": "b8c8f4b41a32532f5e9f7146e511bc61",
+                "operationId": "864e3bd26fe09c0fecb665af777c091a",
                 "parameters": [
                     {
                         "name": "id",
@@ -638,13 +638,13 @@
                 ]
             }
         },
-        "/api/feedback": {
+        "/api/v1/feedback": {
             "get": {
                 "tags": [
                     "Feedback"
                 ],
                 "summary": "Get published feedback",
-                "operationId": "b9a59e3fa02ac43b70e3aed8159d20fb",
+                "operationId": "8fb97ca912166e77b49e237147559627",
                 "parameters": [
                     {
                         "name": "location_id",
@@ -677,7 +677,7 @@
                     "Feedback"
                 ],
                 "summary": "Create customer feedback",
-                "operationId": "73567c0c6ca97cd1fcb79ddac458d4ce",
+                "operationId": "f32305d0fc7b2a84bf867e89355a06b8",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -698,13 +698,13 @@
                 }
             }
         },
-        "/api/feedback/admin": {
+        "/api/v1/feedback/admin": {
             "get": {
                 "tags": [
                     "Feedback"
                 ],
                 "summary": "Get all feedback (Admin only)",
-                "operationId": "655b5d626c295eb5ac612c9da46c1ae6",
+                "operationId": "3de361155fb0d96a237589200fbd7b92",
                 "parameters": [
                     {
                         "name": "status",
@@ -728,13 +728,13 @@
                 ]
             }
         },
-        "/api/feedback/{id}": {
+        "/api/v1/feedback/{id}": {
             "put": {
                 "tags": [
                     "Feedback"
                 ],
                 "summary": "Update feedback status or comment (Admin only)",
-                "operationId": "3215f0f7d7c7aec0c9fafdd5b94159b3",
+                "operationId": "9f04cba4796661cbe4349598fed6b95c",
                 "parameters": [
                     {
                         "name": "id",
@@ -775,7 +775,7 @@
                     "Feedback"
                 ],
                 "summary": "Delete feedback (Admin only)",
-                "operationId": "e92c75dd4ee77bdb93b34df76a4757df",
+                "operationId": "088d5f1a00163dfa45f02e2147817ab7",
                 "parameters": [
                     {
                         "name": "id",
@@ -802,13 +802,13 @@
                 ]
             }
         },
-        "/api/jobs": {
+        "/api/v1/jobs": {
             "get": {
                 "tags": [
                     "Jobs"
                 ],
                 "summary": "Get all jobs",
-                "operationId": "9538d30d530d4c3680ea31fe228944e2",
+                "operationId": "c98ae9d463f48beffe8b3f90dd9f209f",
                 "parameters": [
                     {
                         "name": "status",
@@ -868,7 +868,7 @@
                     "Jobs"
                 ],
                 "summary": "Create a new job posting",
-                "operationId": "36deb2a6480382cf8385911c10aeebf0",
+                "operationId": "54fc4d863c91b9ba2bb8183269cf83e2",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -894,13 +894,13 @@
                 ]
             }
         },
-        "/api/jobs/{id}": {
+        "/api/v1/jobs/{id}": {
             "get": {
                 "tags": [
                     "Jobs"
                 ],
                 "summary": "Get a single job posting",
-                "operationId": "6de31489b41fa51255446ac2ad15b7fb",
+                "operationId": "be401cce2258e81e42ef1e9c9ffe5493",
                 "parameters": [
                     {
                         "name": "id",
@@ -931,7 +931,7 @@
                     "Jobs"
                 ],
                 "summary": "Update a job posting",
-                "operationId": "66762b778fbd20dd4fbd09628dabba17",
+                "operationId": "b46a91bd306bded8425a80e5849b7f43",
                 "parameters": [
                     {
                         "name": "id",
@@ -972,7 +972,7 @@
                     "Jobs"
                 ],
                 "summary": "Delete a job posting",
-                "operationId": "5537fd998abc3a62eef8c09e4ae52000",
+                "operationId": "8626e9fa83d434a94f114e29330f33aa",
                 "parameters": [
                     {
                         "name": "id",
@@ -999,13 +999,13 @@
                 ]
             }
         },
-        "/api/locations": {
+        "/api/v1/locations": {
             "get": {
                 "tags": [
                     "Locations"
                 ],
                 "summary": "Get all locations",
-                "operationId": "c22aa1cae7ab2b2ad315141d06fec369",
+                "operationId": "9bbe66ccd9a8de4d94275b1f6c4be2b9",
                 "parameters": [
                     {
                         "name": "search",
@@ -1047,7 +1047,7 @@
                     "Locations"
                 ],
                 "summary": "Create a new location",
-                "operationId": "055665bfbdc18cab3dc956925a9000b4",
+                "operationId": "3af24cfa81f4c045f6490e97e6653698",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -1073,13 +1073,13 @@
                 ]
             }
         },
-        "/api/locations/{id}": {
+        "/api/v1/locations/{id}": {
             "get": {
                 "tags": [
                     "Locations"
                 ],
                 "summary": "Get a single location",
-                "operationId": "bcaac2b6f85e83cdc99139be535c66e6",
+                "operationId": "6bc92e1682723116be7ea8ff826b9f4c",
                 "parameters": [
                     {
                         "name": "id",
@@ -1110,7 +1110,7 @@
                     "Locations"
                 ],
                 "summary": "Update a location",
-                "operationId": "3ac5d4120b6fb23f55f179649493a2d8",
+                "operationId": "57f14eec99aa037d5624561c548f8ad9",
                 "parameters": [
                     {
                         "name": "id",
@@ -1151,7 +1151,7 @@
                     "Locations"
                 ],
                 "summary": "Delete a location",
-                "operationId": "721591ee086203214e6eb54f25625656",
+                "operationId": "d69677f30e8f588247d039bb36d50082",
                 "parameters": [
                     {
                         "name": "id",
@@ -1178,13 +1178,13 @@
                 ]
             }
         },
-        "/api/users": {
+        "/api/v1/users": {
             "get": {
                 "tags": [
                     "Users"
                 ],
                 "summary": "Get paginated list of users",
-                "operationId": "8535da4a404df62ab2b62d7c92793f92",
+                "operationId": "cd392c45ccb6bb3b890b5f33545fef56",
                 "responses": {
                     "200": {
                         "description": "Paginated list of users",
@@ -1211,7 +1211,7 @@
                     "Users"
                 ],
                 "summary": "Create a new user",
-                "operationId": "ce054f86d47a9740ebe4d221355b6cc7",
+                "operationId": "a16405bfefa6321c5387b109097f363a",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -1240,13 +1240,13 @@
                 ]
             }
         },
-        "/api/users/{id}": {
+        "/api/v1/users/{id}": {
             "get": {
                 "tags": [
                     "Users"
                 ],
                 "summary": "Get a single user",
-                "operationId": "fdc01f74899cbf594b61e950a8e5f642",
+                "operationId": "01afe9a300d61fff2731c67306aaaa9b",
                 "parameters": [
                     {
                         "name": "id",
@@ -1277,7 +1277,7 @@
                     "Users"
                 ],
                 "summary": "Update a user",
-                "operationId": "b16ed85bbe1d08e30c678d1836444c07",
+                "operationId": "33b0193579328e471e55f5909b058ada",
                 "parameters": [
                     {
                         "name": "id",
@@ -1321,7 +1321,7 @@
                     "Users"
                 ],
                 "summary": "Delete a user",
-                "operationId": "2bdfd5ef37cb1f88768c2f8bd2d0dfb4",
+                "operationId": "d5d9c407373d617d6de538f306cb715c",
                 "parameters": [
                     {
                         "name": "id",
@@ -1351,13 +1351,47 @@
                 ]
             }
         },
-        "/api/media": {
+        "/api/v1/media": {
+            "get": {
+                "tags": [
+                    "Media"
+                ],
+                "summary": "Get paginated list of media files",
+                "operationId": "38e169c977c89abd4302c456a21601ff",
+                "parameters": [
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Page number",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    },
+                    {
+                        "name": "per_page",
+                        "in": "query",
+                        "description": "Number of items per page",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "example": 10
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Paginated list of media files"
+                    }
+                }
+            },
             "post": {
                 "tags": [
                     "Media"
                 ],
                 "summary": "Upload a media file",
-                "operationId": "eeaf63768829900435c84f27180703fb",
+                "operationId": "8ad7a1074d93540b41dc18dd175ce90e",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -1397,13 +1431,13 @@
                 ]
             }
         },
-        "/api/media/{id}": {
+        "/api/v1/media/{id}": {
             "get": {
                 "tags": [
                     "Media"
                 ],
                 "summary": "Get media details",
-                "operationId": "eddcbeb0a30c2ed9f7976b92953256d6",
+                "operationId": "d8e600d4d0bd0c2043e72b72081194e6",
                 "parameters": [
                     {
                         "name": "id",
@@ -1434,7 +1468,7 @@
                     "Media"
                 ],
                 "summary": "Update a media file",
-                "operationId": "079d5f69f1f944b17f8c531f7010f36a",
+                "operationId": "589c55a5264d212da8a58c3e0c0ea5c0",
                 "parameters": [
                     {
                         "name": "id",
@@ -1485,7 +1519,7 @@
                     "Media"
                 ],
                 "summary": "Delete a media file",
-                "operationId": "c72a2960d2dac76e80e4ff469fc99b09",
+                "operationId": "e0b13c20747983d68250465d708d8cbe",
                 "parameters": [
                     {
                         "name": "id",
@@ -1512,13 +1546,13 @@
                 ]
             }
         },
-        "/api/milestones": {
+        "/api/v1/milestones": {
             "get": {
                 "tags": [
                     "Milestones"
                 ],
                 "summary": "Get all milestones",
-                "operationId": "a54498f155f45cfd06e14071b7c56520",
+                "operationId": "06833a04e8006652914227c41ad2cb1c",
                 "parameters": [
                     {
                         "name": "status",
@@ -1580,7 +1614,7 @@
                     "Milestones"
                 ],
                 "summary": "Create a new milestone",
-                "operationId": "0a59d1add34138afccc83b9ecbcd52fe",
+                "operationId": "bffeba129f5426c4182b81ff4633e6d4",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -1606,13 +1640,13 @@
                 ]
             }
         },
-        "/api/milestones/{id}": {
+        "/api/v1/milestones/{id}": {
             "get": {
                 "tags": [
                     "Milestones"
                 ],
                 "summary": "Get a single milestone",
-                "operationId": "a8ecf22e431f95bc690af942625663ed",
+                "operationId": "6e8b7d36235414b7468a7cf345de7151",
                 "parameters": [
                     {
                         "name": "id",
@@ -1643,7 +1677,7 @@
                     "Milestones"
                 ],
                 "summary": "Update a milestone",
-                "operationId": "be14ab8ea7063cf95671a32269bbe373",
+                "operationId": "04950d89d6048cbccd535c98f7ca0657",
                 "parameters": [
                     {
                         "name": "id",
@@ -1684,7 +1718,7 @@
                     "Milestones"
                 ],
                 "summary": "Delete a milestone",
-                "operationId": "22df6235f63f6273e832ec6e6c197795",
+                "operationId": "a04af678540ce55a94f34a2ad99a47f6",
                 "parameters": [
                     {
                         "name": "id",
@@ -1711,13 +1745,115 @@
                 ]
             }
         },
-        "/api/team-members": {
+        "/api/v1/notifications": {
+            "get": {
+                "tags": [
+                    "Notifications"
+                ],
+                "summary": "Fetch all notifications for admin users",
+                "operationId": "f840a445048dd4bb44357e5a7918027e",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "type": "integer",
+                                                "example": 1
+                                            },
+                                            "type": {
+                                                "type": "string",
+                                                "example": "App\\Notifications\\OrderShipped"
+                                            },
+                                            "data": {
+                                                "type": "object",
+                                                "example": {
+                                                    "order_id": 123
+                                                }
+                                            },
+                                            "read_at": {
+                                                "type": "string",
+                                                "format": "date-time",
+                                                "example": "2023-10-01T12:00:00Z"
+                                            },
+                                            "created_at": {
+                                                "type": "string",
+                                                "format": "date-time",
+                                                "example": "2023-10-01T12:00:00Z"
+                                            },
+                                            "updated_at": {
+                                                "type": "string",
+                                                "format": "date-time",
+                                                "example": "2023-10-01T12:00:00Z"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "No admin users found"
+                    },
+                    "403": {
+                        "description": "Unauthorized access"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/notifications/{id}/mark-as-read": {
+            "post": {
+                "tags": [
+                    "Notifications"
+                ],
+                "summary": "Mark a notification as read",
+                "operationId": "76d6dbcc25719a787b3d23dc01a9c717",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Notification ID",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Notification marked as read"
+                    },
+                    "403": {
+                        "description": "Unauthorized access"
+                    },
+                    "404": {
+                        "description": "Notification not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/team-members": {
             "get": {
                 "tags": [
                     "Team Members"
                 ],
                 "summary": "Get all team members",
-                "operationId": "b34e8010b0fe4331a0934852350422cf",
+                "operationId": "8477a66bd31ee1b46e1939ede9f078b8",
                 "parameters": [
                     {
                         "name": "role",
@@ -1773,7 +1909,7 @@
                     "Team Members"
                 ],
                 "summary": "Create a new team member",
-                "operationId": "ebceff7b8479b39a15c4274fb60638fb",
+                "operationId": "036e5cb7eeea02f8a935fa0bc1ca1dc1",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -1799,13 +1935,13 @@
                 ]
             }
         },
-        "/api/team-members/{id}": {
+        "/api/v1/team-members/{id}": {
             "get": {
                 "tags": [
                     "Team Members"
                 ],
                 "summary": "Get a single team member",
-                "operationId": "cd8cadc1715392bfc4f329323f93dd72",
+                "operationId": "dd7c339b3495de58ce2754833900bfda",
                 "parameters": [
                     {
                         "name": "id",
@@ -1836,7 +1972,7 @@
                     "Team Members"
                 ],
                 "summary": "Update a team member",
-                "operationId": "d6424fd97eae26513aa3e1b7873634a3",
+                "operationId": "ce87d628494e5c57f7aa2ea7e796e65a",
                 "parameters": [
                     {
                         "name": "id",
@@ -1873,13 +2009,13 @@
                 ]
             }
         },
-        "/team-members/{id}": {
+        "api/v1/team-members/{id}": {
             "delete": {
                 "tags": [
                     "Team Members"
                 ],
                 "summary": "Delete a team member",
-                "operationId": "f1bc65ac23b573e2cb7735a83630c23c",
+                "operationId": "86b0f55966d283fa0bc885f645e6de20",
                 "parameters": [
                     {
                         "name": "id",
@@ -1906,13 +2042,13 @@
                 ]
             }
         },
-        "/api/positions": {
+        "/api/v1/positions": {
             "get": {
                 "tags": [
                     "Workstream"
                 ],
                 "summary": "Get all published Workstream positions",
-                "operationId": "267c2aaefd78860281d1d17a0611280d",
+                "operationId": "47dfa45829e57349a0ef31d42fa978da",
                 "responses": {
                     "200": {
                         "description": "List of published positions",
@@ -2498,6 +2634,10 @@
         {
             "name": "Milestones",
             "description": "Milestones"
+        },
+        {
+            "name": "Notifications",
+            "description": "Notifications"
         },
         {
             "name": "Team Members",

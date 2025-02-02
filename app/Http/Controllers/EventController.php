@@ -11,7 +11,7 @@ class EventController extends Controller
 {
     /**
      * @OA\Post(
-     *     path="/api/events",
+     *     path="/api/v1/events",
      *     summary="Create a new event",
      *     tags={"Events"},
      *     security={{"bearerAuth":{}}},
@@ -54,7 +54,7 @@ class EventController extends Controller
 
     /**
      * @OA\Get(
-     *     path="/api/events",
+     *     path="/api/v1/events",
      *     summary="Get all events",
      *     tags={"Events"},
      *     @OA\Parameter(
@@ -99,7 +99,7 @@ class EventController extends Controller
 
     /**
      * @OA\Get(
-     *     path="/api/events/{id}",
+     *     path="/api/v1/events/{id}",
      *     summary="Get a single event",
      *     tags={"Events"},
      *     security={{"bearerAuth":{}}},
@@ -133,7 +133,7 @@ class EventController extends Controller
 
     /**
      * @OA\Put(
-     *     path="/api/events/{id}",
+     *     path="/api/v1/events/{id}",
      *     summary="Update an event",
      *     tags={"Events"},
      *     security={{"bearerAuth":{}}},
@@ -174,7 +174,7 @@ class EventController extends Controller
 
     /**
      * @OA\Delete(
-     *     path="/api/events/{id}",
+     *     path="/api/v1/events/{id}",
      *     summary="Delete an event",
      *     tags={"Events"},
      *     security={{"bearerAuth":{}}},

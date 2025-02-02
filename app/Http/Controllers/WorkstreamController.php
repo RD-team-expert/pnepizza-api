@@ -68,7 +68,7 @@ class WorkstreamController extends Controller
 
     /**
      * @OA\Get(
-     *     path="/api/positions",
+     *     path="/api/v1/positions",
      *     summary="Get all published Workstream positions",
      *     tags={"Workstream"},
      *     @OA\Response(

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Feedback;
+use App\Services\NotificationService;
 use Illuminate\Http\Request;
 
 
@@ -10,7 +11,7 @@ class FeedbackController extends Controller
 {
     /**
      * @OA\Post(
-     *     path="/api/feedback",
+     *     path="/api/v1/feedback",
      *     summary="Create customer feedback",
      *     tags={"Feedback"},
      *     @OA\RequestBody(
@@ -26,7 +27,7 @@ class FeedbackController extends Controller
      *     )
      * )
      */
-    public function store(Request $request)
+    public function store(Request $request , NotificationService $notificationService)
     {
         try {
         $request->validate([
@@ -44,7 +45,10 @@ class FeedbackController extends Controller
             'status' => 'Pending', // Default status
         ]);
 
-        return response()->json($feedback, 201);
+        $notificationService->notifyAdmin('A new feedback has been created: ' . $feedback->customer_name);
+
+
+            return response()->json($feedback, 201);
         } catch (\Exception $exception) {
             return response()->json([
                 'msg' => $exception->getMessage(),
@@ -54,7 +58,7 @@ class FeedbackController extends Controller
 
     /**
      * @OA\Get(
-     *     path="/api/feedback",
+     *     path="/api/v1/feedback",
      *     summary="Get published feedback",
      *     tags={"Feedback"},
      *     @OA\Parameter(
@@ -96,7 +100,7 @@ class FeedbackController extends Controller
 
     /**
      * @OA\Get(
-     *     path="/api/feedback/admin",
+     *     path="/api/v1/feedback/admin",
      *     summary="Get all feedback (Admin only)",
      *     tags={"Feedback"},
      *     security={{"bearerAuth":{}}},
@@ -136,7 +140,7 @@ class FeedbackController extends Controller
 
     /**
      * @OA\Put(
-     *     path="/api/feedback/{id}",
+     *     path="/api/v1/feedback/{id}",
      *     summary="Update feedback status or comment (Admin only)",
      *     tags={"Feedback"},
      *     security={{"bearerAuth":{}}},
@@ -183,7 +187,7 @@ class FeedbackController extends Controller
 
     /**
      * @OA\Delete(
-     *     path="/api/feedback/{id}",
+     *     path="/api/v1/feedback/{id}",
      *     summary="Delete feedback (Admin only)",
      *     tags={"Feedback"},
      *     security={{"bearerAuth":{}}},

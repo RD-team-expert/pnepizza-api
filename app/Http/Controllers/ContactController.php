@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Events\ContactCreated;
 use App\Http\Controllers\Controller;
 use App\Models\Contact;
+use App\Services\NotificationService;
 use Illuminate\Http\Request;
 
 
@@ -12,7 +13,7 @@ class ContactController extends Controller
 {
     /**
      * @OA\Get(
-     *     path="/api/contacts",
+     *     path="/api/v1/contacts",
      *     summary="Get all contacts",
      *     tags={"Contacts"},
      *     @OA\Parameter(
@@ -81,7 +82,7 @@ class ContactController extends Controller
 
     /**
      * @OA\Post(
-     *     path="/api/contacts",
+     *     path="/api/v1/contacts",
      *     summary="Create a new contact",
      *     tags={"Contacts"},
      *     @OA\RequestBody(
@@ -92,7 +93,7 @@ class ContactController extends Controller
      *     @OA\Response(response=422, description="Validation error")
      * )
      */
-    public function store(Request $request)
+    public function store(Request $request , NotificationService $notificationService)
     {
         try {
 
@@ -109,6 +110,8 @@ class ContactController extends Controller
         ]);
 
         $contact = Contact::create($request->all());
+        $notificationService->notifyAdmin('A new contact has been created: ' . $contact->name);
+
         event(new ContactCreated($contact));
 
         return response()->json($contact, 201);
@@ -122,7 +125,7 @@ class ContactController extends Controller
 
     /**
      * @OA\Get(
-     *     path="/api/contacts/{id}",
+     *     path="/api/v1/contacts/{id}",
      *     summary="Get a single contact",
      *     tags={"Contacts"},
      *     security={{"bearerAuth":{}}},
@@ -151,7 +154,7 @@ class ContactController extends Controller
 
     /**
      * @OA\Put(
-     *     path="/api/contacts/{id}",
+     *     path="/api/v1/contacts/{id}",
      *     summary="Update a contact",
      *     tags={"Contacts"},
      *     security={{"bearerAuth":{}}},
@@ -187,7 +190,7 @@ class ContactController extends Controller
 
     /**
      * @OA\Delete(
-     *     path="/api/contacts/{id}",
+     *     path="/api/v1/contacts/{id}",
      *     summary="Delete a contact",
      *     tags={"Contacts"},
      *     security={{"bearerAuth":{}}},

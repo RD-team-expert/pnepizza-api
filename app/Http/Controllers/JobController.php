@@ -11,7 +11,7 @@ class JobController extends Controller
 {
     /**
      * @OA\Get(
-     *     path="/api/jobs",
+     *     path="/api/v1/jobs",
      *     summary="Get all jobs",
      *     tags={"Jobs"},
      *
@@ -92,7 +92,7 @@ class JobController extends Controller
 
     /**
      * @OA\Post(
-     *     path="/api/jobs",
+     *     path="/api/v1/jobs",
      *     summary="Create a new job posting",
      *     tags={"Jobs"},
      *     security={{"bearerAuth":{}}},
@@ -139,7 +139,7 @@ class JobController extends Controller
 
     /**
      * @OA\Get(
-     *     path="/api/jobs/{id}",
+     *     path="/api/v1/jobs/{id}",
      *     summary="Get a single job posting",
      *     tags={"Jobs"},
      *     security={{"bearerAuth":{}}},
@@ -174,7 +174,7 @@ class JobController extends Controller
 
     /**
      * @OA\Put(
-     *     path="/api/jobs/{id}",
+     *     path="/api/v1/jobs/{id}",
      *     summary="Update a job posting",
      *     tags={"Jobs"},
      *     security={{"bearerAuth":{}}},
@@ -214,7 +214,7 @@ class JobController extends Controller
 
     /**
      * @OA\Delete(
-     *     path="/api/jobs/{id}",
+     *     path="/api/v1/jobs/{id}",
      *     summary="Delete a job posting",
      *     tags={"Jobs"},
      *     security={{"bearerAuth":{}}},
