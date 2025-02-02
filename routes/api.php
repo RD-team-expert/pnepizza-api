@@ -11,6 +11,7 @@ use App\Http\Controllers\ManageUserController;
 use App\Http\Controllers\MediaController;
 use App\Http\Controllers\MilestoneController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\SettingController;
 use App\Http\Controllers\TeamMemberController;
 use App\Http\Controllers\WorkstreamController;
 use Illuminate\Http\Request;
@@ -48,7 +49,9 @@ Route::post('/acquisitions', [AcquisitionController::class, 'store']);
 Route::middleware('auth:sanctum')->group(function () {
 
 
-Route::post('/locations', [LocationController::class, 'store']); // Create
+    Route::post('/logout', [AuthController::class, 'logout']);
+
+    Route::post('/locations', [LocationController::class, 'store']); // Create
 Route::get('/locations/{id}', [LocationController::class, 'show']); // Read single
 Route::put('/locations/{id}', [LocationController::class, 'update']); // Update
 Route::delete('/locations/{id}', [LocationController::class, 'destroy']); // Delete
@@ -106,6 +109,9 @@ Route::prefix('users')->group(function () {
     Route::post('/notifications/{id}/mark-as-read', [NotificationController::class, 'markAsRead']);
 
 });
+    Route::get('/settings', [SettingController::class, 'index']);
+    Route::get('/settings/{id}', [SettingController::class, 'view']);
+    Route::put('/settings/{id}', [SettingController::class, 'update']);
 
 });
 
