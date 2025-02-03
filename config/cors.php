@@ -21,6 +21,8 @@ return [
 
     'allowed_origins' => ['*'],
 
+//    [env('FRONTEND_URL', 'http://localhost:8000')],
+
     'allowed_origins_patterns' => [],
 
     'allowed_headers' => ['*'],
@@ -29,6 +31,6 @@ return [
 
     'max_age' => 0,
 
-    'supports_credentials' => false,
+    'supports_credentials' => true,
 
 ];

@@ -181,6 +181,7 @@ class AcquisitionController extends Controller
      */
     public function update(Request $request, $id)
     {
+
         try {
 
 
@@ -198,6 +199,7 @@ class AcquisitionController extends Controller
 
         $acquisition->update($request->all());
         return response()->json($acquisition);
+
         } catch (\Exception $exception) {
             return response()->json([
                 'msg' => $exception->getMessage(),

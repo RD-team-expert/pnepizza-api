@@ -40,31 +40,60 @@ class AuthController extends Controller
      *     ),
      *     @OA\Response(response=401, description="Invalid credentials")
      * )
+     * @param Request $request
+     * @return
      */
+//    public function login(Request $request)
+//    {
+//        try {
+//
+//
+//        $request->validate([
+//            'email' => 'required|email',
+//            'password' => 'required|string',
+//        ]);
+//
+//        $user = User::where('email', $request->email)->first();
+//
+//        if (! $user || ! Hash::check($request->password, $user->password)) {
+//            throw ValidationException::withMessages([
+//                'email' => ['The provided credentials are incorrect.'],
+//            ]);
+//        }
+//
+//        $token = $user->createToken($user->name . '-' . self::TOKEN_NAME)->plainTextToken;
+//
+//        return (new UserResource($user))->additional([
+//            'token' => $token,
+//        ]);
+//        } catch (\Exception $exception) {
+//            return response()->json([
+//                'msg' => $exception->getMessage(),
+//            ]);
+//        }
+//    }
+
+
     public function login(Request $request)
     {
+
+//        dd($request->session());
         try {
 
 
-        $request->validate([
-            'email' => 'required|email',
-            'password' => 'required|string',
-        ]);
 
-        $user = User::where('email', $request->email)->first();
+            $credentials = $request->only('email', 'password');
 
-        if (! $user || ! Hash::check($request->password, $user->password)) {
-            throw ValidationException::withMessages([
-                'email' => ['The provided credentials are incorrect.'],
-            ]);
-        }
+            if (Auth::attempt($credentials)) {
+                $request->session()->regenerate();
+                return response()->json(['message' => 'Authenticated']);
+            }
 
-        $token = $user->createToken($user->name . '-' . self::TOKEN_NAME)->plainTextToken;
 
-        return (new UserResource($user))->additional([
-            'token' => $token,
-        ]);
-        } catch (\Exception $exception) {
+
+
+            return response()->json(['message' => 'Invalid credentials'], 401);
+    } catch (\Exception $exception) {
             return response()->json([
                 'msg' => $exception->getMessage(),
             ]);
@@ -87,28 +116,42 @@ class AuthController extends Controller
      *     )
      * )
      */
+//    public function logout(Request $request)
+//    {
+//        try {
+//            // Get the authenticated user
+//            $user = Auth::user();
+//
+//            // Check if the user is authenticated
+//            if ($user) {
+//                // Delete all tokens associated with the user
+//                $user->tokens()->delete();
+//
+//                // Return a success response
+//                return response()->json(['message' => 'Successfully logged out'], 200);
+//            } else {
+//                // If the user is not authenticated, return an error response
+//                return response()->json(['message' => 'User not authenticated'], 401);
+//            }
+//
+//        } catch (\Exception $exception) {
+//            return response()->json([
+//                'msg' => $exception->getMessage(),
+//            ]);
+//        }
+//    }
+
     public function logout(Request $request)
     {
-        try {
-            // Get the authenticated user
-            $user = Auth::user();
+        // Log out the user from the session.
+        Auth::logout();
 
-            // Check if the user is authenticated
-            if ($user) {
-                // Delete all tokens associated with the user
-                $user->tokens()->delete();
+        // Invalidate the session and regenerate the CSRF token.
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
 
-                // Return a success response
-                return response()->json(['message' => 'Successfully logged out'], 200);
-            } else {
-                // If the user is not authenticated, return an error response
-                return response()->json(['message' => 'User not authenticated'], 401);
-            }
-
-        } catch (\Exception $exception) {
-            return response()->json([
-                'msg' => $exception->getMessage(),
-            ]);
-        }
+        return response()->json(['message' => 'Successfully logged out'], 200);
     }
+
+
 }

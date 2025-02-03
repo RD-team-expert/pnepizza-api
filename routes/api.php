@@ -22,7 +22,9 @@ Route::prefix('v1')->group(function () {
 
 Route::get('/positions', [WorkstreamController::class, 'getPositions']);
 
-Route::post('/login', [AuthController::class, 'login'])->name('login');
+Route::post('/login', [AuthController::class, 'login'])
+
+    ->name('login')->middleware('guest');
 
 Route::get('/locations', [LocationController::class, 'index']); // Read all
 
@@ -46,7 +48,7 @@ Route::get('/acquisitions', [AcquisitionController::class, 'index']);
 Route::post('/acquisitions', [AcquisitionController::class, 'store']);
 
 
-Route::middleware('auth:sanctum')->group(function () {
+Route::middleware(['auth:sanctum'])->group(function () {
 
 
     Route::post('/logout', [AuthController::class, 'logout']);
