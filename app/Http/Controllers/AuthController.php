@@ -2,14 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
-use App\Http\Resources\UserResource;
-use App\Models\User;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\ValidationException;
-
 
 class AuthController extends Controller
 {
@@ -143,14 +138,19 @@ class AuthController extends Controller
 
     public function logout(Request $request)
     {
-        // Log out the user from the session.
-        Auth::logout();
+        try {
 
         // Invalidate the session and regenerate the CSRF token.
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
         return response()->json(['message' => 'Successfully logged out'], 200);
+
+        } catch (\Exception $exception) {
+            return response()->json([
+                'msg' => $exception->getMessage(),
+            ]);
+        }
     }
 
 
