@@ -60,18 +60,6 @@ class MilestoneController extends Controller
 
         $query = Milestone::query();
 
-        if ($request->has('status')) {
-            $query->where('status', $request->input('status'));
-        }
-
-        if ($request->has('start_date')) {
-            $query->where('date', '>=', $request->input('start_date'));
-        }
-
-        if ($request->has('end_date')) {
-            $query->where('date', '<=', $request->input('end_date'));
-        }
-
         if ($request->has('search')) {
             $search = $request->input('search');
             $query->where(function ($q) use ($search) {
@@ -115,7 +103,6 @@ class MilestoneController extends Controller
             'date' => 'required|date',
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'status' => 'nullable|string|in:pending,completed,in_progress',
         ]);
 
         $milestone = Milestone::create($request->all());

@@ -52,6 +52,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
 
     Route::post('/logout', [AuthController::class, 'logout']);
+    Route::post('/user', [AuthController::class, 'view']);
+
 
     Route::post('/locations', [LocationController::class, 'store']); // Create
 Route::get('/locations/{id}', [LocationController::class, 'show']); // Read single
@@ -100,13 +102,13 @@ Route::put('/contacts/{id}', [ContactController::class, 'update']); // Update a 
 Route::delete('/contacts/{id}', [ContactController::class, 'destroy']); // Delete a specific contact
 Route::get('/contacts/{id}', [ContactController::class, 'show']); // Get a specific contact
 
-Route::prefix('users')->group(function () {
-    Route::get('/', [ManageUserController::class, 'index']); // List users
-    Route::post('/', [ManageUserController::class, 'store']); // Create user
-    Route::get('/{user}', [ManageUserController::class, 'show']); // Show specific user
-    Route::post('/{user}', [ManageUserController::class, 'update']); // Update user
-    Route::delete('/{user}', [ManageUserController::class, 'destroy']); // Delete user
-});
+
+    Route::get('/manageuser', [ManageUserController::class, 'index']); // List users
+    Route::post('/manageuser', [ManageUserController::class, 'store']); // Create user
+    Route::get('/manageuser/{user}', [ManageUserController::class, 'show']); // Show specific user
+    Route::post('/manageuser/{user}', [ManageUserController::class, 'update']); // Update user
+    Route::delete('/manageuser/{user}', [ManageUserController::class, 'destroy']); // Delete user
+
     Route::get('/notifications', [NotificationController::class, 'index']);
     Route::post('/notifications/{id}/mark-as-read', [NotificationController::class, 'markAsRead']);
 

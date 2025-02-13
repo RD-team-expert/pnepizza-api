@@ -22,7 +22,7 @@ class Milestone extends Model
         'date',
         'title',
         'description',
-        'status',
+
     ];
 
 }

@@ -58,15 +58,11 @@ class TeamMemberController extends Controller
             $query->where('role', $request->input('role'));
         }
 
-        if ($request->has('status')) {
-            $query->where('status', $request->input('status'));
-        }
-
         if ($request->has('search')) {
             $search = $request->input('search');
             $query->where(function ($q) use ($search) {
                 $q->where('name', 'like', "%$search%")
-                    ->orWhere('bio', 'like', "%$search%");
+                    ->orWhere('description', 'like', "%$search%");
             });
         }
 
@@ -105,8 +101,8 @@ class TeamMemberController extends Controller
             'name' => 'required|string|max:255',
             'role' => 'required|string|max:255',
             'profile_image' => 'nullable|string',
-            'bio' => 'nullable|string',
-            'status' => 'nullable|string|in:active,inactive',
+            'description' => 'nullable|string',
+
         ]);
 
         $teamMember = TeamMember::create($request->all());

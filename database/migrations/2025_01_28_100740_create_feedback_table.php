@@ -14,9 +14,9 @@ return new class extends Migration
         Schema::create('feedback', function (Blueprint $table) {
             $table->id();
             $table->string('customer_name');
+            $table->string('email');
             $table->integer('rating')->nullable();
             $table->text('comment');
-            $table->foreignId('location_id')->constrained('locations')->onDelete('cascade');
             $table->string('status')->default('Pending');
             $table->timestamps();
         });

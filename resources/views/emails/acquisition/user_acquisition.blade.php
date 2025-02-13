@@ -37,20 +37,8 @@
                     </td>
                 </tr>
                 <tr>
-                    <td style="padding: 8px; font-size: 16px; color: #333333;"><strong>City:</strong></td>
-                    <td style="padding: 8px; font-size: 16px; color: #666666;">{{ $acquisition->city }}</td>
-                </tr>
-                <tr>
-                    <td style="padding: 8px; font-size: 16px; color: #333333;"><strong>State:</strong></td>
-                    <td style="padding: 8px; font-size: 16px; color: #666666;">{{ $acquisition->state }}</td>
-                </tr>
-                <tr>
-                    <td style="padding: 8px; font-size: 16px; color: #333333;"><strong>Status:</strong></td>
-                    <td style="padding: 8px; font-size: 16px; color: #666666;">{{ $acquisition->status }}</td>
-                </tr>
-                <tr>
-                    <td style="padding: 8px; font-size: 16px; color: #333333;"><strong>Priority:</strong></td>
-                    <td style="padding: 8px; font-size: 16px; color: #666666;">{{ $acquisition->priority }}</td>
+                    <td style="padding: 8px; font-size: 16px; color: #333333;"><strong>Info:</strong></td>
+                    <td style="padding: 8px; font-size: 16px; color: #666666;">{{ $acquisition->info }}</td>
                 </tr>
             </table>
             <p style="font-size: 18px; line-height: 1.6; color: #333333; margin-top: 20px;">

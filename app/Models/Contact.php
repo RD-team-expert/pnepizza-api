@@ -29,10 +29,8 @@ class Contact extends Model
         'email',
         'phone',
         'message',
-        'contact_via_email',
-        'contact_via_phone',
         'status',
-        'priority',
+
     ];
 
 }

@@ -58,9 +58,6 @@ class ContactController extends Controller
             $query->where('status', $request->input('status'));
         }
 
-        if ($request->has('priority')) {
-            $query->where('priority', $request->input('priority'));
-        }
 
         if ($request->has('search')) {
             $search = $request->input('search');
@@ -103,10 +100,7 @@ class ContactController extends Controller
             'email' => 'required|email|unique:contacts,email',
             'phone' => 'nullable|string|max:20',
             'message' => 'required|string',
-            'contact_via_email' => 'nullable|boolean',
-            'contact_via_phone' => 'nullable|boolean',
             'status' => 'nullable|string|in:pending,completed',
-            'priority' => 'nullable|string|in:low,medium,high',
         ]);
 
         $contact = Contact::create($request->all());

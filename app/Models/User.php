@@ -71,8 +71,5 @@ class User extends Authenticatable
 //            get: fn($value, $attributes) => $attributes['image'] ?  asset('storage/user/' . $attributes['image']) : null
 //        );
 //    }
-    public function media()
-    {
-        return $this->hasMany(Media::class, "user_id");
-    }
+
 }

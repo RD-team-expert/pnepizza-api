@@ -14,12 +14,10 @@ return new class extends Migration
         Schema::create('acquisitions', function (Blueprint $table) {
             $table->id();
             $table->string('name'); // Name field
+            $table->text('info'); // Name field
             $table->string('email')->unique(); // Email field, unique
             $table->string('phone')->nullable(); // Phone field, nullable
-            $table->string('city')->nullable(); // City field, nullable
-            $table->string('state')->nullable(); // State field, nullable
             $table->string('status')->default('pending'); // Status field with default value
-            $table->string('priority')->default('medium'); // Priority field with default value
             $table->timestamps();
         });
     }

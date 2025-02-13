@@ -16,8 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('role');
             $table->string('profile_image')->nullable(); // Path to the image file
-            $table->text('bio')->nullable();
-            $table->string('status')->default('active'); // Example: active, inactive
+            $table->text('description')->nullable();
             $table->timestamps();
         });
     }

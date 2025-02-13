@@ -23,7 +23,6 @@ class TeamMember extends Model
         'name',
         'role',
         'profile_image',
-        'bio',
-        'status',
+        'description',
     ];
 }

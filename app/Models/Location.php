@@ -36,11 +36,10 @@ class Location extends Model
         'zip',
         'description',
         'status',
-        'lc_url'
+        'lc_url',
+        'latitude',
+        'longitude'
     ];
 
-    public function Feedback()
-    {
-        return $this->hasMany(Feedback::class);
-    }
+
 }

@@ -24,11 +24,8 @@ class Feedback extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'customer_name', 'rating', 'comment', 'location_id', 'status'
+        'customer_name', 'rating', 'comment', 'status', 'email'
     ];
 
-    public function location()
-    {
-        return $this->belongsTo(Location::class);
-    }
+
 }

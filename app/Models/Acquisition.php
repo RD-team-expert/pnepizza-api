@@ -25,9 +25,8 @@ class Acquisition extends Model
         'name',
         'email',
         'phone',
-        'city',
-        'state',
         'status',
-        'priority',
+        'info'
+
     ];
 }

@@ -39,26 +39,14 @@
                 </tr>
                 <tr>
                     <td style="padding-bottom: 15px;">
-                        <p style="font-size: 18px; font-weight: bold; color: #333333; margin: 0 0 5px 0;">City:</p>
-                        <p style="font-size: 16px; color: #666666; margin: 0;">{{ $acquisition->city }}</p>
-                    </td>
-                </tr>
-                <tr>
-                    <td style="padding-bottom: 15px;">
-                        <p style="font-size: 18px; font-weight: bold; color: #333333; margin: 0 0 5px 0;">State:</p>
-                        <p style="font-size: 16px; color: #666666; margin: 0;">{{ $acquisition->state }}</p>
-                    </td>
-                </tr>
-                <tr>
-                    <td style="padding-bottom: 15px;">
                         <p style="font-size: 18px; font-weight: bold; color: #333333; margin: 0 0 5px 0;">Status:</p>
                         <p style="font-size: 16px; color: #666666; margin: 0;">{{ $acquisition->status }}</p>
                     </td>
                 </tr>
                 <tr>
                     <td style="padding-bottom: 15px;">
-                        <p style="font-size: 18px; font-weight: bold; color: #333333; margin: 0 0 5px 0;">Priority:</p>
-                        <p style="font-size: 16px; color: #666666; margin: 0;">{{ $acquisition->priority }}</p>
+                        <p style="font-size: 18px; font-weight: bold; color: #333333; margin: 0 0 5px 0;">Info:</p>
+                        <p style="font-size: 16px; color: #666666; margin: 0;">{{ $acquisition->info }}</p>
                     </td>
                 </tr>
                 <tr>

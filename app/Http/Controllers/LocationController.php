@@ -32,11 +32,13 @@ class LocationController extends Controller
     {
         try {
 
-        $request->validate([
+      $v =  $request->validate([
             'name' => 'required|string',
             'image_url' => 'nullable|url',
             'street' => 'required|string',
             'city' => 'required|string',
+            'latitude ' => 'string',
+            'longitude' => 'string',
             'state' => 'required|string',
             'zip' => 'required|string',
             'description' => 'nullable|string',

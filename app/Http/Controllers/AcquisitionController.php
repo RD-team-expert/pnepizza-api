@@ -59,16 +59,11 @@ class AcquisitionController extends Controller
                 $query->where('status', $request->input('status'));
             }
 
-            if ($request->has('priority')) {
-                $query->where('priority', $request->input('priority'));
-            }
-
             if ($request->has('search')) {
                 $search = $request->input('search');
                 $query->where(function ($q) use ($search) {
                     $q->where('name', 'like', "%$search%")
                         ->orWhere('email', 'like', "%$search%")
-                        ->orWhere('city', 'like', "%$search%")
                         ->orWhere('state', 'like', "%$search%");
                 });
             }
@@ -101,10 +96,9 @@ class AcquisitionController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|email',
             'phone' => 'nullable|string|max:20',
-            'city' => 'required|string|max:100',
-            'state' => 'required|string|size:2',
+            'info' => 'nullable|string|max:50',
             'status' => 'nullable|string|in:New,In Review,Contacted,Closed',
-            'priority' => 'nullable|string|in:High,Medium,Low',
+
         ]);
 
         try {
@@ -191,10 +185,9 @@ class AcquisitionController extends Controller
             'name' => 'sometimes|string|max:255',
             'email' => 'sometimes|email|unique:acquisitions,email,' . $acquisition->id,
             'phone' => 'nullable|string|max:20',
-            'city' => 'sometimes|string|max:100',
-            'state' => 'sometimes|string|size:2',
+            'info' => 'nullable|string|max:55',
             'status' => 'nullable|string|in:New,In Review,Contacted,Closed',
-            'priority' => 'nullable|string|in:High,Medium,Low',
+
         ]);
 
         $acquisition->update($request->all());

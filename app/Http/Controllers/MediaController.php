@@ -41,10 +41,29 @@ class MediaController extends Controller
     public function index(Request $request)
     {
         try {
+            // Get the number of items per page from the request (default to 10)
             $perPage = $request->query('per_page', 10);
+
+            // Paginate the media items
             $media = Media::paginate($perPage);
-            return response()->json($media);
+
+            // Customize the pagination response
+            return response()->json([
+                'current_page' => $media->currentPage(),
+                'data' => $media->items(), // The actual media items
+                'first_page_url' => $media->url(1), // URL to the first page
+                'from' => $media->firstItem(), // Starting item number
+                'last_page' => $media->lastPage(), // Last page number
+                'last_page_url' => $media->url($media->lastPage()), // URL to the last page
+                'next_page_url' => $media->nextPageUrl(), // URL to the next page
+                'path' => $media->path(), // Base path for pagination URLs
+                'per_page' => $media->perPage(), // Number of items per page
+                'prev_page_url' => $media->previousPageUrl(), // URL to the previous page
+                'to' => $media->lastItem(), // Ending item number
+                'total' => $media->total(), // Total number of items
+            ]);
         } catch (\Exception $exception) {
+            // Handle exceptions and return an error response
             return response()->json([
                 'msg' => $exception->getMessage(),
             ], 500);
@@ -81,7 +100,6 @@ class MediaController extends Controller
         try {
 
         $request->validate([
-            'user_id' => 'required|exists:users,id',
             'file' => 'required|file|mimes:jpg,jpeg,png,gif',
         ]);
 
@@ -97,7 +115,6 @@ class MediaController extends Controller
             ->save(public_path('storage/' . $thumbnailPath));
 
         $media = Media::create([
-            'user_id' => $request->user_id,
             'file_name' => $fileName,
             'file_path' => '/storage/' . $filePath,
             'thumbnail_path' => '/storage/' . $thumbnailPath,
@@ -187,7 +204,6 @@ class MediaController extends Controller
         $media = Media::findOrFail($id);
 
         $request->validate([
-            'user_id' => 'required|exists:users,id',
             'file' => 'nullable|file|mimes:jpg,jpeg,png,gif|max:2048',
         ]);
 

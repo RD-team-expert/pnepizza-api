@@ -17,6 +17,8 @@ class CreateLocationsTable extends Migration
             $table->string('image_url')->nullable();
             $table->string('street');
             $table->string('city');
+            $table->string('latitude');
+            $table->string('longitude');
             $table->string('state');
             $table->string('zip');
             $table->text('description')->nullable();

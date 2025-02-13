@@ -8,6 +8,7 @@ use App\Http\Requests\UpdateUserRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Storage;
 
@@ -38,12 +39,28 @@ class ManageUserController extends Controller
      *     )
      * )
      */
-    public function index(): JsonResource
+    public function index(Request $request)
     {
         try {
+            $perPage = $request->query('per_page', 10);
 
-        $users = User::paginate(10);
-        return UserResource::collection($users);
+              $users = User::paginate($perPage);
+
+            return response()->json([
+                'current_page' => $users->currentPage(),
+                'data' => $users->items(), // The actual media items
+                'first_page_url' => $users->url(1), // URL to the first page
+                'from' => $users->firstItem(), // Starting item number
+                'last_page' => $users->lastPage(), // Last page number
+                'last_page_url' => $users->url($users->lastPage()), // URL to the last page
+                'next_page_url' => $users->nextPageUrl(), // URL to the next page
+                'path' => $users->path(), // Base path for pagination URLs
+                'per_page' => $users->perPage(), // Number of items per page
+                'prev_page_url' => $users->previousPageUrl(), // URL to the previous page
+                'to' => $users->lastItem(), // Ending item number
+                'total' => $users->total(), // Total number of items
+            ]);
+
 
         } catch (\Exception $exception) {
             return response()->json([
@@ -185,7 +202,10 @@ class ManageUserController extends Controller
 
         try {
             $user->update(array_merge($validated, ['image' => $imagePath]));
-            $user->syncRoles($validated['role']);
+            if ($request->has('role')){
+                $user->syncRoles($validated['role']);
+            }
+
         } catch (\Exception $e) {
             return response()->json(['message' => 'User update failed', 'error' => $e->getMessage()], 500);
         }
