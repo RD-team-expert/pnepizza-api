@@ -153,9 +153,9 @@ class AuthController extends Controller
     public function view(Request $request)
     {
         try {
-            return response()->json([
+            return response()->json(
                   $request->user(),
-            ]);
+            );
         } catch (\Exception $exception) {
             return response()->json([
                 'msg' => $exception->getMessage(),
