@@ -52,7 +52,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
 
     Route::post('/logout', [AuthController::class, 'logout']);
-    Route::post('/user', [AuthController::class, 'view']);
+    Route::get('/user', [AuthController::class, 'view']);
 
 
     Route::post('/locations', [LocationController::class, 'store']); // Create

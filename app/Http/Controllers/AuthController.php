@@ -61,6 +61,7 @@ class AuthController extends Controller
         }
 
         $token = $user->createToken($user->name . '-' . self::TOKEN_NAME)->plainTextToken;
+            $request->session()->regenerate();
 
             return response()->json([
                 'token' => $token,
@@ -132,6 +133,8 @@ class AuthController extends Controller
             if ($user) {
                 // Delete all tokens associated with the user
                 $user->tokens()->delete();
+                $request->session()->invalidate();
+                $request->session()->regenerateToken();
 
                 // Return a success response
                 return response()->json(['message' => 'Successfully logged out'], 200);
