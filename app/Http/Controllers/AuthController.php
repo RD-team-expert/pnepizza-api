@@ -150,11 +150,11 @@ class AuthController extends Controller
         }
     }
 
-    public function view()
+    public function view(Request $request)
     {
         try {
             return response()->json([
-                "user"=>  Auth::user(),
+                  $request->user(),
             ]);
         } catch (\Exception $exception) {
             return response()->json([
