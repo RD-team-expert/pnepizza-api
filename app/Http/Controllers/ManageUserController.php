@@ -189,28 +189,53 @@ class ManageUserController extends Controller
      */
     public function update(UpdateUserRequest $request, User $user): JsonResponse
     {
-
-        $validated = $request->validated();
-        $imagePath = $user->image;
-
-        if ($request->hasFile('image')) {
-            if ($user->image) {
-                Storage::delete($user->image);
-            }
-            $imagePath = $request->file('image')->store($this->pathImage);
-        }
-
         try {
-            $user->update(array_merge($validated, ['image' => $imagePath]));
-            if ($request->has('role')){
+            $validated = $request->validated();
+
+            // Hash password if provided
+            if (isset($validated['password'])) {
+                $validated['password'] = bcrypt($validated['password']);
+            }
+
+            // Handle image update
+            $imagePath = $user->image;
+            if ($request->hasFile('image')) {
+                // Delete old image if exists
+                if ($user->image) {
+                    Storage::delete($user->image);
+                }
+                $imagePath = $request->file('image')->store($this->pathImage);
+            }
+
+            // Update user with validated data
+            $user->update([
+                'name' => $validated['name'],        // Keep these changes
+                'email' => $validated['email'],      // Keep these changes
+                'password' => $validated['password'] ?? $user->password,
+                'image' => $imagePath,
+                // Add other fields as needed
+            ]);
+
+            // Update role if provided
+            if ($request->has('role')) {
                 $user->syncRoles($validated['role']);
             }
 
-        } catch (\Exception $e) {
-            return response()->json(['message' => 'User update failed', 'error' => $e->getMessage()], 500);
-        }
+            return response()->json([
+                'message' => 'User updated successfully',
+                'user' => ($user)
+            ]);
 
-        return response()->json(['message' => 'User updated successfully', 'user' => $user]);
+        } catch (\Exception $exception) {
+            // Rollback image changes if error occurred
+            if (isset($imagePath) && $imagePath !== $user->image) {
+                Storage::delete($imagePath);
+            }
+        return response()->json([
+            'message' => 'User update failed',
+            'error' => $exception->getMessage()
+        ], 500);
+    }
     }
 
     /**
