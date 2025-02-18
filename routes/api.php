@@ -89,7 +89,7 @@ Route::delete('/team-members/{id}', [TeamMemberController::class, 'destroy']);
 
 Route::post('/media', [MediaController::class, 'store']);
 Route::get('/media/{id}', [MediaController::class, 'show']);
-Route::post('/update/media/{id}', [MediaController::class, 'update']);
+//Route::post('/update/media/{id}', [MediaController::class, 'update']);
 Route::delete('/media/{id}', [MediaController::class, 'destroy']);
 
 
