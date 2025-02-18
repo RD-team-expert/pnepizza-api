@@ -17,7 +17,7 @@ return new class extends Migration
             $table->text('info'); // Name field
             $table->string('email')->unique(); // Email field, unique
             $table->string('phone')->nullable(); // Phone field, nullable
-            $table->string('status')->default('pending'); // Status field with default value
+            $table->string('status')->default('New'); // Status field with default value
             $table->timestamps();
         });
     }

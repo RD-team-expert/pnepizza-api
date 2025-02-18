@@ -40,7 +40,6 @@ Route::get('/milestones', [MilestoneController::class, 'index']);
 
 Route::get('/media', [MediaController::class, 'index']);
 
-Route::get('/contacts', [ContactController::class, 'index']); // Get all contacts
 Route::post('/contacts', [ContactController::class, 'store']); // Create a new contact
 
 
@@ -98,6 +97,7 @@ Route::put('/acquisitions/{id}', [AcquisitionController::class, 'update']);
 Route::delete('/acquisitions/{id}', [AcquisitionController::class, 'destroy']);
 Route::get('/acquisitions/{id}', [AcquisitionController::class, 'show']);
 
+Route::get('/contacts', [ContactController::class, 'index']); // Get all contacts
 Route::put('/contacts/{id}', [ContactController::class, 'update']); // Update a specific contact
 Route::delete('/contacts/{id}', [ContactController::class, 'destroy']); // Delete a specific contact
 Route::get('/contacts/{id}', [ContactController::class, 'show']); // Get a specific contact

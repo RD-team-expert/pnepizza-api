@@ -172,7 +172,7 @@ class FeedbackController extends Controller
             'comment' => 'sometimes|string',
         ]);
 
-        $feedback->update($request->only(['status', 'comment']));
+        $feedback->update($request->all());
         return response()->json($feedback);
 
         } catch (\Exception $exception) {
