@@ -269,14 +269,23 @@ class MediaController extends Controller
     public function destroy($id)
     {
         try {
+            $media = Media::findOrFail($id);
 
-        Media::findOrFail($id)->delete();
-        return response()->json(null, 204);
+            // Convert URLs to storage paths
+            $filePath = str_replace(env('APP_URL').'/storage/', '', $media->file_path);
+            $thumbnailPath = str_replace(env('APP_URL').'/storage/', '', $media->thumbnail_path);
 
+            // Delete both files from storage
+            Storage::disk('public')->delete([$filePath, $thumbnailPath]);
+
+            // Delete the database record
+            $media->delete();
+
+            return response()->json(null, 204);
         } catch (\Exception $exception) {
             return response()->json([
                 'msg' => $exception->getMessage(),
-            ]);
+            ], 500); // Added proper HTTP status code
         }
     }
 }
