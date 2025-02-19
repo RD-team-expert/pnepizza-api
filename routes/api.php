@@ -112,11 +112,11 @@ Route::get('/contacts/{id}', [ContactController::class, 'show']); // Get a speci
     Route::get('/notifications', [NotificationController::class, 'index']);
     Route::post('/notifications/{id}/mark-as-read', [NotificationController::class, 'markAsRead']);
 
-});
+
     Route::get('/settings', [SettingController::class, 'index']);
     Route::get('/settings/{id}', [SettingController::class, 'view']);
     Route::put('/settings/{id}', [SettingController::class, 'update']);
-
+});
 });
 
 

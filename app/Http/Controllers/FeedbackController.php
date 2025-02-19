@@ -167,12 +167,15 @@ class FeedbackController extends Controller
 
         $feedback = Feedback::findOrFail($id);
 
-        $request->validate([
+     $v=   $request->validate([
+            'customer_name' => 'sometimes|string',
+            'rating' => 'nullable|integer|between:1,5',
+            'email' => 'sometimes|string|email',
             'status' => 'sometimes|in:Pending,Published,Archived',
             'comment' => 'sometimes|string',
         ]);
 
-        $feedback->update($request->all());
+        $feedback->update($v);
         return response()->json($feedback);
 
         } catch (\Exception $exception) {

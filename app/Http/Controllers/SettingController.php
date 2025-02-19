@@ -162,12 +162,12 @@ class SettingController extends Controller
     {
         // Validate incoming request
         $validated = $request->validate([
-            'website_title' => 'required|string|max:255',
-            'keywords' => 'required|string',
-            'description' => 'required|string',
-            'og_title' => 'required|string|max:255',
-            'og_image_url' => 'required|url',
-            'og_description' => 'required|string',
+            'website_title' => 'sometimes|string|max:255',
+            'keywords' => 'sometimes|string',
+            'description' => 'sometimes|string',
+            'og_title' => 'sometimes|string|max:255',
+            'og_image_url' => 'sometimes|url',
+            'og_description' => 'sometimes|string',
         ]);
 
         // Find the setting by ID
