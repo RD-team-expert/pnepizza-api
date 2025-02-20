@@ -165,9 +165,8 @@ class SettingController extends Controller
             'website_title' => 'sometimes|string|max:255',
             'keywords' => 'sometimes|string',
             'description' => 'sometimes|string',
-            'og_title' => 'sometimes|string|max:255',
-            'og_image_url' => 'sometimes|url',
-            'og_description' => 'sometimes|string',
+            'Google_Analytics_ID' => 'sometimes|string|max:255',
+            'Google_Maps_API_Key' => 'sometimes|url',
         ]);
 
         // Find the setting by ID

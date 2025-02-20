@@ -45,10 +45,14 @@ class ManageUserController extends Controller
             $perPage = $request->query('per_page', 10);
 
               $users = User::paginate($perPage);
+                $data=[];
+                foreach ($users as $user){
+                    $data[] =  new UserResource($user->loadMissing('roles'));
+                }
 
             return response()->json([
                 'current_page' => $users->currentPage(),
-                'data' => $users->items(), // The actual media items
+                'data' => $data, // The actual media items
                 'first_page_url' => $users->url(1), // URL to the first page
                 'from' => $users->firstItem(), // Starting item number
                 'last_page' => $users->lastPage(), // Last page number
@@ -98,11 +102,17 @@ class ManageUserController extends Controller
         $imagePath = null;
 
         if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store($this->pathImage);
+            $file = $request->file('image');
+            $fileName = time() . '_' . $file->getClientOriginalName();
+            $imagePath = $file->storeAs('user', $fileName, 'public');
+
+
         }
 
         try {
+
             $user = User::create(array_merge($validated, ['image' => $imagePath]));
+//            $user->image = Storage::url($imagePath);
             $role = $validated['role'];
 
             if (!in_array($role, ['Admin', 'Acquisition', 'BRM'])) {
@@ -110,6 +120,8 @@ class ManageUserController extends Controller
             }
 
             $user->assignRole($role);
+
+           $user = new UserResource($user->loadMissing('roles'));
         } catch (\Exception $e) {
             if ($imagePath) {
                 Storage::delete($imagePath);
@@ -117,7 +129,7 @@ class ManageUserController extends Controller
             return response()->json(['message' => 'User creation failed', 'error' => $e->getMessage()], 500);
         }
 
-        return response()->json(['message' => 'User created successfully', 'user' => $user], 201);
+        return response()->json(['message' => 'User created successfully', 'user' =>$user], 201);
 
         } catch (\Exception $exception) {
             return response()->json([
@@ -148,7 +160,7 @@ class ManageUserController extends Controller
      *     )
      * )
      */
-    public function show(User $user): JsonResource
+    public function show(User $user)
     {
         try {
         return new UserResource($user->loadMissing('roles'));
@@ -201,25 +213,39 @@ class ManageUserController extends Controller
             $imagePath = $user->image;
             if ($request->hasFile('image')) {
                 // Delete old image if exists
-                if ($user->image) {
-                    Storage::delete($user->image);
-                }
-                $imagePath = $request->file('image')->store($this->pathImage);
+
+                Storage::disk('public')->delete([
+                    str_replace('/storage/', '', $imagePath)
+                ]);
+
+
+                $file = $request->file('image');
+                $fileName = time() . '_' . $file->getClientOriginalName();
+                $imagePath = $file->storeAs('user', $fileName, 'public');
+
+                $user->image = Storage::url('public/'.$imagePath);
+
+
+                $user->save();
             }
 
             // Update user with validated data
-            $user->update([
-                'name' => $validated['name'],        // Keep these changes
-                'email' => $validated['email'],      // Keep these changes
-                'password' => $validated['password'] ?? $user->password,
-                'image' => $imagePath,
-                // Add other fields as needed
-            ]);
+            if (isset($validated['name'])){
+                $user->update(['name' => $validated['name']]);
+            }
+            if (isset($validated['email'])){
+                $user->update(['email' => $validated['email']]);
+            }
+            if (isset($validated['image'])){
+                $user->update(['image' => $imagePath]);
+            }
 
             // Update role if provided
             if ($request->has('role')) {
                 $user->syncRoles($validated['role']);
             }
+            $user = new UserResource($user->loadMissing('roles'));
+
 
             return response()->json([
                 'message' => 'User updated successfully',

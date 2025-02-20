@@ -16,9 +16,8 @@ return new class extends Migration
             $table->string('website_title');
             $table->string('keywords');
             $table->text('description');
-            $table->string('og_title');
-            $table->string('og_image_url');
-            $table->text('og_description');
+            $table->string('Google_Maps_API_Key');
+            $table->string('Google_Analytics_ID');
             $table->timestamps();
         });
     }

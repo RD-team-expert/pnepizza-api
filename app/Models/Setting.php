@@ -10,8 +10,7 @@ class Setting extends Model
         'website_title',
         'keywords',
         'description',
-        'og_title',
-        'og_image_url',
-        'og_description',
+        'Google_Maps_API_Key',
+        'Google_Analytics_ID',
     ];
 }

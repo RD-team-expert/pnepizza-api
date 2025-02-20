@@ -59,6 +59,7 @@ class AuthController extends Controller
                 'email' => ['The provided credentials are incorrect.'],
             ]);
         }
+        $user = new UserResource($user->loadMissing('roles'));
 
         $token = $user->createToken($user->name . '-' . self::TOKEN_NAME)->plainTextToken;
             $request->session()->regenerate();
@@ -152,9 +153,11 @@ class AuthController extends Controller
 
     public function view(Request $request)
     {
+        $user = $request->user();
+        $user = new UserResource($user->loadMissing('roles'));
         try {
             return response()->json(
-                  $request->user(),
+                $user,
             );
         } catch (\Exception $exception) {
             return response()->json([

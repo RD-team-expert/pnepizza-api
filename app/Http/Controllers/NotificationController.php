@@ -48,11 +48,39 @@ class NotificationController extends Controller
             // Fetch notifications for the authenticated admin
             $notifications = $user->notifications;
 
+            $formattedNotifications = $notifications->map(function ($notification) {
+                return [
+                    'id' => $notification->id,
+                    'message' => $notification->data['message'],
+                    'created_at_message' => $notification->data['created_at'],
+                    'read_at' => $notification->read_at,
+                    'is_read'=> $notification->read_at ? 1:0,
+                    'created_at' => $notification->created_at,
+                    'updated_at' => $notification->updated_at,
+                ];
+            });
+
+            $readNotificationsCount = $notifications->filter(function ($notification) {
+                return $notification->read_at !== null;
+            })->count();
+            $unreadNotificationsCount = $notifications->filter(function ($notification) {
+                return $notification->read_at == null;
+            })->count();
+
+              $count= count($formattedNotifications);
+
             if ($notifications->isEmpty()) {
                 return response()->json(['message' => 'No notifications found'], 404);
             }
 
-            return response()->json($notifications);
+            return response()->json([
+
+                'data'=>$formattedNotifications,
+                'readed' => $readNotificationsCount,
+                'unread' => $unreadNotificationsCount,
+                'count' => $count,
+
+            ]);
 
 
         } catch (\Exception $exception) {
