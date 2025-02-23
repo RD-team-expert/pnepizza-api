@@ -35,7 +35,7 @@ Route::get('/feedback', [FeedbackController::class, 'index']); // Read published
 
 Route::get('/jobs', [JobController::class, 'index']);
 
-
+Route::get('/team-members', [TeamMemberController::class, 'index']);
 Route::get('/milestones', [MilestoneController::class, 'index']);
 
 Route::get('/media', [MediaController::class, 'index']);
@@ -80,7 +80,7 @@ Route::get('/milestones/{id}', [MilestoneController::class, 'show']);
 Route::put('/milestones/{id}', [MilestoneController::class, 'update']);
 Route::delete('/milestones/{id}', [MilestoneController::class, 'destroy']);
 
-Route::get('/team-members', [TeamMemberController::class, 'index']);
+
 Route::post('/team-members', [TeamMemberController::class, 'store']);
 Route::get('/team-members/{id}', [TeamMemberController::class, 'show']);
 Route::put('/team-members/{id}', [TeamMemberController::class, 'update']);
