@@ -95,34 +95,79 @@ class MediaController extends Controller
      *     )
      * )
      */
+//    public function store(Request $request)
+//    {
+//        try {
+//
+//        $request->validate([
+//            'file' => 'required|file|mimes:jpg,jpeg,png,gif',
+//        ]);
+//
+//        $file = $request->file('file');
+//        $fileName = time() . '_' . $file->getClientOriginalName();
+//        $filePath = $file->storeAs('uploads', $fileName, 'public');
+//        $thumbnailPath = 'uploads/thumbnails/thumb_' . $fileName;
+//
+//        Storage::disk('public')->makeDirectory('uploads/thumbnails');
+//
+//        Image::open($file->getPathname())
+//            ->resize(200, 200)
+//            ->save(public_path('storage/' . $thumbnailPath));
+//
+//
+//        $media = Media::create([
+//            'file_name' => $fileName,
+//            'file_path' =>env('APP_URL') .'/storage/' . $filePath,
+//            'thumbnail_path' => env('APP_URL') .'/storage/' . $thumbnailPath,
+//            'file_size' => $file->getSize(),
+//            'mime_type' => $file->getMimeType(),
+//        ]);
+//
+//        return response()->json($media, 201);
+//
+//        } catch (\Exception $exception) {
+//            return response()->json([
+//                'msg' => $exception->getMessage(),
+//            ]);
+//        }
+//    }
     public function store(Request $request)
     {
         try {
+            $request->validate([
+                'file' => 'required|file|mimes:jpg,jpeg,png,gif',
+            ]);
 
-        $request->validate([
-            'file' => 'required|file|mimes:jpg,jpeg,png,gif',
-        ]);
+            $file = $request->file('file');
+            $fileName = time() . '_' . $file->getClientOriginalName();
 
-        $file = $request->file('file');
-        $fileName = time() . '_' . $file->getClientOriginalName();
-        $filePath = $file->storeAs('uploads', $fileName, 'public');
-        $thumbnailPath = 'uploads/thumbnails/thumb_' . $fileName;
+            // Store the file on the 'public' disk
+            $filePath = $file->storeAs('uploads', $fileName, 'public');
 
-        Storage::disk('public')->makeDirectory('uploads/thumbnails');
+            // Confirm file exists (optional debug)
+            if (!Storage::disk('public')->exists($filePath)) {
+                throw new \Exception("File was not stored properly.");
+            }
 
-        Image::open($file->getPathname())
-            ->resize(200, 200)
-            ->save(public_path('storage/' . $thumbnailPath));
+            $thumbnailPath = 'uploads/thumbnails/thumb_' . $fileName;
+            Storage::disk('public')->makeDirectory('uploads/thumbnails');
 
-        $media = Media::create([
-            'file_name' => $fileName,
-            'file_path' =>env('APP_URL') .'/storage/' . $filePath,
-            'thumbnail_path' => env('APP_URL') .'/storage/' . $thumbnailPath,
-            'file_size' => $file->getSize(),
-            'mime_type' => $file->getMimeType(),
-        ]);
+            // Get the absolute path of the stored file
+            $storedFilePath = Storage::disk('public')->path($filePath);
 
-        return response()->json($media, 201);
+            Image::open($storedFilePath)
+                ->resize(200, 200)
+                ->save(public_path('storage/' . $thumbnailPath));
+
+            $media = Media::create([
+                'file_name'       => $fileName,
+                'file_path'       => env('APP_URL') . '/storage/' . $filePath,
+                'thumbnail_path'  => env('APP_URL') . '/storage/' . $thumbnailPath,
+                'file_size'       => $file->getSize(),
+                'mime_type'       => $file->getMimeType(),
+            ]);
+
+            return response()->json($media, 201);
 
         } catch (\Exception $exception) {
             return response()->json([
@@ -130,7 +175,6 @@ class MediaController extends Controller
             ]);
         }
     }
-
     /**
      * @OA\Get(
      *     path="/api/v1/media/{id}",
