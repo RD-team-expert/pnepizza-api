@@ -117,8 +117,8 @@ class MediaController extends Controller
 
         $media = Media::create([
             'file_name' => $fileName,
-            'file_path' =>env('APP_URL') .'/storage/' . $filePath,
-            'thumbnail_path' => env('APP_URL') .'/storage/' . $thumbnailPath,
+//            'file_path' =>env('APP_URL') .'/storage/' . $filePath,
+            'file_path' => env('APP_URL') .'/storage/' . $thumbnailPath,
             'file_size' => $file->getSize(),
             'mime_type' => $file->getMimeType(),
         ]);
