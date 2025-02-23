@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\Location;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 
 class LocationController extends Controller
@@ -91,6 +92,9 @@ class LocationController extends Controller
     {
         try {
 
+
+
+
         $query = Location::query();
 
         if ($request->has('search')) {
@@ -98,11 +102,12 @@ class LocationController extends Controller
                 ->orWhere('street', 'like', '%' . $request->search . '%');
         }
 
-        if ($request->has('status')) {
-            $query->where('status', $request->status);
-        }
 
-        return response()->json($query->get());
+            $query->where('status', 'active');
+
+
+
+            return response()->json($query->get());
 
         } catch (\Exception $exception) {
             return response()->json([
@@ -133,10 +138,14 @@ class LocationController extends Controller
      *     )
      * )
      */
-    public function show($id)
+    public function show()
     {
         try {
-        return response()->json(Location::findOrFail($id));
+            $user = Auth::user();
+            $query = Location::query();
+            if ( !$user->hasRole('Admin')) {
+                return response()->json($query->get());
+            }
 
         } catch (\Exception $exception) {
             return response()->json([

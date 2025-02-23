@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name'); // Name field
             $table->text('info'); // Name field
-            $table->string('email')->unique(); // Email field, unique
+            $table->string('email'); // Email field, unique
             $table->string('phone')->nullable(); // Phone field, nullable
             $table->string('status')->default('New'); // Status field with default value
             $table->timestamps();

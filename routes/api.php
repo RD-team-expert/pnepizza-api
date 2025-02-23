@@ -42,6 +42,7 @@ Route::get('/media', [MediaController::class, 'index']);
 
 Route::post('/contacts', [ContactController::class, 'store']); // Create a new contact
 
+Route::get('/settings', [SettingController::class, 'index']);
 
 Route::get('/acquisitions', [AcquisitionController::class, 'index']);
 Route::post('/acquisitions', [AcquisitionController::class, 'store']);
@@ -55,7 +56,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
 
     Route::post('/locations', [LocationController::class, 'store']); // Create
-Route::get('/locations/{id}', [LocationController::class, 'show']); // Read single
+Route::get('admin/locations', [LocationController::class, 'show']); // Read single
 Route::put('/locations/{id}', [LocationController::class, 'update']); // Update
 Route::delete('/locations/{id}', [LocationController::class, 'destroy']); // Delete
 
@@ -114,7 +115,7 @@ Route::get('/contacts/{id}', [ContactController::class, 'show']); // Get a speci
     Route::post('/notifications/mark-all-read', [NotificationController::class, 'markAllAsRead']);
 
 
-    Route::get('/settings', [SettingController::class, 'index']);
+
     Route::get('/settings/{id}', [SettingController::class, 'view']);
     Route::put('/settings/{id}', [SettingController::class, 'update']);
 });

@@ -19,6 +19,9 @@ class SettingSeeder extends Seeder
             'description' => 'Your local pizza restaurant committed to serving the community with quality food and exceptional service.',
             'Google_Maps_API_Key' => 'PNE Pizza - Quality Pizza & Community Service',
             'Google_Analytics_ID' => 'https://example.com/og-image.jpg',
+            'instagram_url' => 'pizza',
+            'logo_image' => 'v',
+            'facebook_url' => 'pizza',
         ]);
     }
 }

@@ -12,5 +12,8 @@ class Setting extends Model
         'description',
         'Google_Maps_API_Key',
         'Google_Analytics_ID',
+        'facebook_url',
+        'instagram_url',
+        'logo_image',
     ];
 }

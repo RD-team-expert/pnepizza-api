@@ -18,6 +18,9 @@ return new class extends Migration
             $table->text('description');
             $table->string('Google_Maps_API_Key');
             $table->string('Google_Analytics_ID');
+            $table->string('logo_image');
+            $table->string('instagram_url');
+            $table->string('facebook_url');
             $table->timestamps();
         });
     }

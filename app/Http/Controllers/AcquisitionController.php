@@ -102,9 +102,7 @@ class AcquisitionController extends Controller
         ]);
 
         try {
-            if (Acquisition::where('email', $validatedData['email'])->exists()) {
-                throw new Exception('A user with this email already exists.');
-            }
+
 
             $acquisition = Acquisition::create($validatedData);
 
