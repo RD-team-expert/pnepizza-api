@@ -111,6 +111,7 @@ Route::get('/contacts/{id}', [ContactController::class, 'show']); // Get a speci
 
     Route::get('/notifications', [NotificationController::class, 'index']);
     Route::post('/notifications/{id}/mark-as-read', [NotificationController::class, 'markAsRead']);
+    Route::post('/notifications/mark-all-read', [NotificationController::class, 'markAllAsRead']);
 
 
     Route::get('/settings', [SettingController::class, 'index']);

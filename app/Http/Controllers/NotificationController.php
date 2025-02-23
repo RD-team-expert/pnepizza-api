@@ -136,4 +136,27 @@ class NotificationController extends Controller
             ]);
         }
     }
+    public function markAllAsRead(Request $request)
+    {
+        try {
+            // Ensure the authenticated user is an admin
+            $user = Auth::user();
+
+            if (!$user || !$user->hasRole('Admin')) {
+                return response()->json(['message' => 'Unauthorized'], 403);
+            }
+
+            // Mark all unread notifications as read
+            $user->unreadNotifications->markAsRead();
+
+            return response()->json([
+                'message' => 'All notifications marked as read'
+            ]);
+
+        } catch (\Exception $exception) {
+            return response()->json([
+                'msg' => $exception->getMessage(),
+            ], 500); // Add proper HTTP status code
+        }
+    }
 }
