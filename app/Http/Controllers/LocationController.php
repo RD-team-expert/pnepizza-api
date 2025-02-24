@@ -103,7 +103,7 @@ class LocationController extends Controller
         }
 
 
-            $query->where('status', 'active');
+            $query->where('status', true);
 
 
 
