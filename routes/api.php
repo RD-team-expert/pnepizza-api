@@ -56,7 +56,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
 
     Route::post('/locations', [LocationController::class, 'store']); // Create
-Route::get('admin/locations', [LocationController::class, 'show']); // Read single
+Route::get('/admin/locations', [LocationController::class, 'show']); // Read single
 Route::put('/locations/{id}', [LocationController::class, 'update']); // Update
 Route::delete('/locations/{id}', [LocationController::class, 'destroy']); // Delete
 
