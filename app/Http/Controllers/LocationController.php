@@ -143,9 +143,9 @@ class LocationController extends Controller
         try {
             $user = Auth::user();
             $query = Location::query();
-            if ( !$user->hasRole('Admin')) {
+
                 return response()->json($query->get());
-            }
+
 
         } catch (\Exception $exception) {
             return response()->json([
