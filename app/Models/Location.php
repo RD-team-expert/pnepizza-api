@@ -37,6 +37,7 @@ class Location extends Model
         'description',
         'status',
         'lc_url',
+        'lc_number',
         'latitude',
         'longitude'
     ];

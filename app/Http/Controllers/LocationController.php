@@ -45,6 +45,7 @@ class LocationController extends Controller
             'description' => 'nullable|string',
             'status' => 'boolean',
             'lc_url' => 'boolean',
+            'lc_number' => 'nullable|string',
         ]);
 
         $location = Location::create($request->all());
@@ -183,10 +184,24 @@ class LocationController extends Controller
     public function update(Request $request, $id)
     {
         try {
+            $request->validate([
+                'name' => 'sometimes|required|string',
+                'image_url' => 'nullable|url',
+                'street' => 'sometimes|required|string',
+                'city' => 'sometimes|required|string',
+                'latitude' => 'sometimes|string',
+                'longitude' => 'sometimes|string',
+                'state' => 'sometimes|required|string',
+                'zip' => 'sometimes|required|string',
+                'description' => 'nullable|string',
+                'status' => 'sometimes|boolean',
+                'lc_url' => 'sometimes|boolean',
+                'lc_number' => 'nullable|string',
+            ]);
 
-        $location = Location::findOrFail($id);
-        $location->update($request->all());
-        return response()->json($location);
+            $location = Location::findOrFail($id);
+            $location->update($request->all());
+            return response()->json($location);
 
         } catch (\Exception $exception) {
             return response()->json([

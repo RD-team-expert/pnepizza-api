@@ -24,6 +24,7 @@ class CreateLocationsTable extends Migration
             $table->text('description')->nullable();
             $table->string('status')->default('active');
             $table->string('lc_url')->nullable();
+            $table->string('lc_number')->nullable();
             $table->timestamps();
         });
     }
